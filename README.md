@@ -533,11 +533,14 @@ provide a way of bypassing the cloud-specific disk creation step so that volumes
 declaratively.
 
 Note that there is a default storage class on GKE named “standard”. You can see this in GCP &rarr; GKE &rarr;
-Storage &rarr; Storage Classes, or in kubectl get sc. The standard storage class uses standard (non-SSD) disks.
+Storage &rarr; Storage Classes, or in `kubectl get sc`. In GKE the standard storage class uses standard
+(non-SSD) disks.
 
-To create an SSD storage class, look at StorageClass/storageclass.yaml. To create a singly-mounted, read-write
-PersistentVolumeClaim, see StorageClass/storageclass-pvc.yaml. To create a single Pod which mounts that claim,
-see StorageClass/storageclass-pod.yaml.
+To create an SSD storage class, look at [StorageClass/storageclass.yaml](./StorageClass/storageclass.yaml "Create a Storage Class).
+To create a singly-mounted, read-write PersistentVolumeClaim in that class, see
+[StorageClass/storageclass-pvc.yaml](./StorageClass/storageclass-pvc.yaml "Create a PVC for a StorageClass").
+To create a single Pod which mounts that claim, see
+[StorageClass/storageclass-pod.yaml](./StorageClass/storageclass-pod.yaml "Create a Pod for a Storage Class").
 
 ### ConfigMaps
 
