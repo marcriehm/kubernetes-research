@@ -498,13 +498,14 @@ Disk Creation").
 
 Now that we have the disk created and formatted (phew!)...
 
-Create a PersistentVolume with [./PersistentVolumes/pv-disk-persistentvolume.yaml]
-(./PersistentVolumes/pv-disk-persistentvolume.yaml "Create a PersistentVolume"). Create a PersistentVolumeClaim
-with [./PersistentVolumes/pv-disk-persistentvolumeclaim.yaml]
-(./PersistentVolumes/pv-disk-persistentvolumeclaim.yaml "Create a PersistentVolumeClaim"). Then view the PVC in
-GCP at Main Menu &rarr; Kubernetes Engine &rarr; Storage &rarr; PersistentVolumeClaims. Create a Deployment which
-uses that PVC with [./PersistentVolumes/pv-disk-deployment.yaml]
-(./PersistentVolumes/pv-disk-deployment.yaml "Create a Deployment for the PVC"). Wait for that Deployment to finish.
+Create a PersistentVolume with
+[./PersistentVolumes/pv-disk-persistentvolume.yaml](./PersistentVolumes/pv-disk-persistentvolume.yaml "Create a PersistentVolume").
+Create a PersistentVolumeClaim with
+[./PersistentVolumes/pv-disk-persistentvolumeclaim.yaml](./PersistentVolumes/pv-disk-persistentvolumeclaim.yaml "Create a PersistentVolumeClaim").
+Then view the PVC in GCP at Main Menu &rarr; Kubernetes Engine &rarr; Storage &rarr; PersistentVolumeClaims.
+Create a Deployment which uses that PVC with
+[./PersistentVolumes/pv-disk-deployment.yaml](./PersistentVolumes/pv-disk-deployment.yaml "Create a Deployment for the PVC").
+Wait for that Deployment to finish.
 
 To see the mounted disk within a Pod of the Deployment, perform the following steps:
 ```
