@@ -216,4 +216,35 @@ include:
 * *kube-proxy* – maintains network routing rules (ipvs) and performs connection forwarding, routing network
 traffic to the appropriate Pods based on their IP addresses and ports.
 
+### User Interfaces
+
+The primary user interface for Kubernetes, on any implementation, is a command-line tool called kubectl. kubectl is
+a command-line interface to the kube-apiserver. kubectl is provided as part of the Kubernetes distribution and
+it may be used against any Kubernetes implementation (e.g. GKE, 
+
+#### kubectl
+
+The primary functions of kubectl are to:
+* make declarations of new (desired) system state;
+* query the system for desired state;
+* query the system for current state;
+* query the system for logs;
+* authenticate users for the above operations.
+
+kubectl can be used to manipulate application Objects in an imperative manner, but this should be strictly avoided.
+
+If you’re working with Kubernetes, you **will** be working in the kubectl CLI – no web application exists to manage the
+wide range of Kubernetes application Objects.
+
+kubectl is discussed further in [kubect.md](./kubectl.md "kubectl.md").
+
+See https://kubernetes.io/docs/reference/kubectl/cheatsheet/.
+
+#### GCP/KE UI
+
+As part of its [Google Cloud Platform (GCP) UI](https://console.cloud.google.com "GCP Home"), Google provides a
+basic Kubernetes Engine UI, GCP/KE, for viewing and manipulating some basic Kubernetes functionality. Within GCP,
+the KKE UI is found at Main Menu &rarr; Kubernetes Engine. GCP/KE is by no means complete and so kubectl is the
+primary user interface. Significantly, GCP/KE can be used to view performance metrics and logs.
+
 
