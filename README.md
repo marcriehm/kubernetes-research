@@ -32,15 +32,16 @@ straddle both Platform as a Service (PaaS) and Infrastructure as a Service (IaaS
 solution for either).
 
 Kubernetes can be considered to be portable because it provides a logical application architecture which can run
-anywhere. All of the major logical constructs (Kubernetes Objects) are defined at a high-enough level and are
-complete enough such that most applications (excepting the complex ones) can run on it with little regard for
-the underlying operating environment or the Kubernetes implementation itself. Indeed, that abstraction is one of
-the foundational motivations for the system.
+on any Kubernetes implementation. All of the major logical constructs (Kubernetes Objects) are defined at a
+high-enough level and are complete enough such that most applications (excepting the complex ones) can run on
+it with little regard for the underlying operating environment or the Kubernetes implementation itself. Indeed,
+that abstraction is one of the foundational motivations for the system.
 
-That being said, it should be noted that Kubernetes is a rich and complex system and is not easily mastered. It
+That being said, it should be noted that Kubernetes is a complex system and is not easily mastered. It
 was designed to run in managed environments and, for most purposes, it is strongly recommended that it be
 provisioned in the cloud, rather than in a custom, in-house implementation. The task of bootstrapping Kubernetes
 up, and providing implementations in support of all of the Objects, is a large one and is best left to specialists.
+
 Kubernetes provides a framework, based on Google's best practices, for managing:
 
 * containers, i.e. Docker;
@@ -85,7 +86,7 @@ In an imperative approach, the author must always be explicitly aware of:
 * How to transform the system from the current to the desired state (complex).
 
 In Kubernetes's declarative approach, the system handles steps 1 and 3, and all the user needs to do is express
-the desired final state of the system.
+the desired final state of the application.
 
 The declarative approach is fundamental in Kubernetes. In some cases both declarative and imperative approaches
 exist, but the declarative one should **always** be chosen over imperative. A declarative statement of configuration
@@ -96,8 +97,7 @@ with imperative statements. Note that a weakness is that you cannot declarativel
 imperative approaches should be used for creation and updating.
 
 ## Overall Architecture
-[Diagram: Relationship of Kubernetes to Docker containers and Vms/Oses.]
-[Logical diagram[s] of Kubernetes Objects, e.g. Containers, Pods, Deployments, ConfigMaps [?], Services, Namespaces. Relationship of Pods to Nodes.]
+
 
 
 
