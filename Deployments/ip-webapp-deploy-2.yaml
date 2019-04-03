@@ -1,0 +1,28 @@
+
+# See https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ip-webapp
+spec:
+  replicas: 3		# we want 3 instances
+  selector:
+    matchLabels:
+      app: ip-webapp
+  minReadySeconds: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  template:
+    metadata:
+      labels:
+        app: ip-webapp
+    spec:
+      containers:
+      - name: ip-webapp-pod
+        image: mriehm/ip-webapp:v2	# the docker image: repo and tag
+        ports:
+        - containerPort: 8080

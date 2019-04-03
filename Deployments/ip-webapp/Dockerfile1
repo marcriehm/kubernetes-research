@@ -1,0 +1,6 @@
+FROM tomcat:9.0-jre11
+MAINTAINER Marc Riehm
+COPY ip-webapp-1/target/ip-webapp-1.war /usr/local/tomcat/webapps/ip-webapp.war
+RUN apt-get update && apt-get install -y --no-install-recommends procps dnsutils coreutils
+RUN groupadd tomcat && useradd -b /usr/local -s /bin/sh -g tomcat tomcat && chown -R tomcat:tomcat /usr/local/tomcat
+USER tomcat:tomcat

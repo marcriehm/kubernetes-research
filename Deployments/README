@@ -1,0 +1,6 @@
+The 'ip-webapp' subdirectory contains the implementation of the webapp, based on a Maven pom.
+There are two versions of the webapp, which get packaged (by the two Dockerfiles) into two
+different Docker images:
+mriehm/ip-webapp:v1
+mriehm/ip-webapp:v2
+See ../Services for a Service (LoadBalancer) definition for this Deployment.
