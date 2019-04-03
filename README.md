@@ -251,4 +251,82 @@ To create your own Kubernetes cluster on Google Kubernetes Engine (GCP/KE), foll
 [Create your Own Kubernetes Cluster on GCP/KE](./create_gke_cluster.md "Create your Own Kubernetes Cluster on
 GCP/KE").
 
+## Kubernetes Objects
+
+### Overview
+
+Kubernetes *Objects* are the core application-level entities within the system. They are persistent “records of intent”
+within the declarative model. Whenever differences exist between the current Object state (the status) and the declared,
+desired state (the spec), the various Kubernetes control loops and the scheduler work to drive the system towards the
+desired state.
+
+Kubernetes end users will work primarily with Objects, creating, updating, reading, and deleting them (in a declarative
+fashion, of course). Objects are the building blocks for applications, and so it is critical to understand what kinds
+of Objects are available and what their capabilities are.
+
+Objects are also called Resources.
+
+The kinds of Objects discussed in this document are:
+* Nodes
+* Namespaces
+* Pods and Containers
+* Deployments
+* StatefulSets
+* DaemonSets
+* Jobs and CronJobs
+* HorizontalPodAutoscalers
+* Services
+* Ingresses
+* PersistentVolumes and PersistentVolumeClaims
+* StorageClasses
+* ConfigMaps
+* Secrets
+* Roles and RoleBindings
+* CertificateSigningRequests
+
+This is not an exhaustive set of Objects, but these are the principal ones for applications.
+
+### Object Metadata
+
+#### Labels and Label Selectors
+
+*Labels* are metadata key/value pairs which are associated with Objects. They are used for identifying Objects,
+particularly in groups. Key syntax is \[domain-name/\]label-name, where \[domain-name\] is optional. Some label
+examples are:
+&nbsp;&nbsp;&nbsp;`environment: "dev"`  
+&nbsp;&nbsp;&nbsp;`release: "stable"`  
+&nbsp;&nbsp;&nbsp;`microservice: "authentication"`
+
+A recommended label strategy may be found at https://kubernetes.io/docs/concepts/overview/working-with-objects/common-labels/ .
+
+*Label Selectors* are used to select sets of objects based on their labels. Example selectors are:
+&nbsp;&nbsp;&nbsp;`environment = prod`
+&nbsp;&nbsp;&nbsp;`tier != frontend`
+&nbsp;&nbsp;&nbsp;`microservice in (authentication, foobar)`
+&nbsp;&nbsp;&nbsp;`KEY`	# select items which have the given key defined
+
+Other selectors include `notin`, Multiple selectors may be used in one selection. An example kubectl usage is:  
+&nbsp;&nbsp;&nbsp;`kubectl get pods -l environment=production,tier=frontend`
+
+Selectors are used in (YAML) service definitions as follows:
+```yaml
+selector: {
+component : redis
+}
+```
+
+Label Selectors are used, for example, in Services to associate Pods with Services, defining the set of Pods which
+fulfill a Service.
+
+#### Field Selectors
+
+Field Selectors are another way of selecting Objects. They are similar to Label Selectors but they can access any
+field in the Object spec or status. An example is:  
+&nbsp;&nbsp;&nbsp;`kubectl get pods --field-selector status.phase=Running`
+
+#### Annotations
+
+Annotations are another form of metadata which may be associated with objects. Annotations are descriptive and
+are not used to identify and select objects. The metadata in an annotation can be small or large, structured or
+unstructured, and can include characters not permitted by labels.
 
