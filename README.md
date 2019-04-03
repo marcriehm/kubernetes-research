@@ -311,7 +311,7 @@ Other selectors include `notin`, Multiple selectors may be used in one selection
 Selectors are used in (YAML) service definitions as follows:
 ```yaml
 selector: {
-component : redis
+    component : redis
 }
 ```
 
