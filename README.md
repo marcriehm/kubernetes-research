@@ -298,6 +298,7 @@ The *kinds* ("kind" being a Kubernetes concept) of Objects discussed in this doc
 * StorageClasses
 * ConfigMaps
 * Secrets
+* Roles and RoleBindings
 
 This is not an exhaustive set of Objects, but these are the principal ones for applications.
 
@@ -490,21 +491,33 @@ StorageClasses, below.**
 
 #### Gke disk creation
 
-To create a disk in GKE, navigate to Google Cloud Platform --> Compute Engine --> Disks and hit the Create Disk button. Set the Name to “pv-disk”. Set the Region to be your compute region (e.g. us-central1) and the zone to be your compute zone (e.g. us-central1-a). Leave the Size at 500GB (important for later). Leave all else the same and hit Create.
-Now you need to format the disk to ext4. To do this, we’ll create a temporary Google Compute Engine (GCE) VM Instance. From GCP --> Google Compute Engine --> VM Instances, click Create Instance. Set the region and zone appropriately, as above. You can leave all else unchanged. Wait for the instance to be created. Click on the instance link. Click the Edit button at the top. Scroll down to Additional Disks and click Attach existing disk. Select your “pv-disk” and click the Done button. Scroll down and click Save to attach pv-disk to your instance. You should still be in the VM Instance Details. Near the top, click the Remote Access “SSH” button. Type lsblk and you should see an unmounted block device named sdb. Type sudo mkfs.ext4 -m 0 -F -E lazy_itable_init=0,lazy_journal_init=0,discard /dev/sdb. Wait. Type sudo mkdir -p /mnt/disks/pv-disk. Type sudo mount -o discard,defaults /dev/sdb /mnt/disks/pv-disk. Type sudo chmod a+w /mnt/disks/pv-disk. You’re done. Exit the ssh shell. You don’t need your temporary GCE instance any more so delete it.
+To create a Google Compute Engine disk, follow the instructions [here](./PersistentVolumes/gke_disk_creation.md "GCE
+Disk Creation").
 
 #### Kubernetes Volume Creation
+
 Now that we have the disk created and formatted (phew!)...
 
-Create a PersistentVolume with YAML-LINK. Create a PersistentVolumeClaim with YAML-LINK. Then view the PVC in GCP at Kubernetes Engine --> Storage --> PersistentVolumeClaims. Create a Deployment which uses that PVC with YAML-LINK. Wait for that Deployment to finish.
+Create a PersistentVolume with [./PersistentVolumes/pv-disk-persistentvolume.yaml]
+(./PersistentVolumes/pv-disk-persistentvolume.yaml "Create a PersistentVolume"). Create a PersistentVolumeClaim
+with [./PersistentVolumes/pv-disk-persistentvolumeclaim.yaml]
+(./PersistentVolumes/pv-disk-persistentvolumeclaim.yaml "Create a PersistentVolumeClaim"). Then view the PVC in
+GCP at Main Menu &rarr; Kubernetes Engine &rarr; Storage &rarr; PersistentVolumeClaims. Create a Deployment which
+uses that PVC with [./PersistentVolumes/pv-disk-deployment.yaml]
+(./PersistentVolumes/pv-disk-deployment.yaml "Create a Deployment for the PVC"). Wait for that Deployment to finish.
 
 To see the mounted disk within a Pod of the Deployment, perform the following steps:
-kubectl get pods -l app=pv-disk	# list pods
-Copy one of the pods’ names.
+```
+kubectl get pods -l app=pv-disk	    # list pods
+# Copy one of the pods’ names.
 Kubectl exec -it POD-NAME sh		# open shell in that pod
-ls -aCFl /pv-disk-volume
-mount | grep pv-disk-volume		# look at the mounts
-Note that this example creates a multiply-mounted (multiple pods), read-only disk volume. You can also create a singly-mounted read-write volume, e.g. for a database server. To create a multiply-mounted, read-write volume, you must use something like NFS. I did not explore NFS.
+ls -aCFl /pv-disk-volume            # here your command executes within the Container of the Pod (docker magic)
+mount | grep pv-disk-volume		    # look at the mounts
+```
+
+Note that this example creates a multiply-mounted (multiple pods), read-only disk volume. You can also create
+a singly-mounted read-write volume, e.g. for a database server. To create a multiply-mounted, read-write volume,
+you must use something like NFS. I did not explore NFS.
 
 ### StorageClasses
 See:
@@ -515,7 +528,7 @@ See:
 
 The problem with the PersistentVolume approach is that it doesn’t scale well – for each PVC which is created,
 a disk must be provisioned, formatted, and managed in the back end (e.g. in the cloud provider). *StorageClasses*
-provide a way of bypassing the cloud-specific disk creation step so that Volumes may be created completely
+provide a way of bypassing the cloud-specific disk creation step so that volumes may be created completely
 declaratively.
 
 Note that there is a default storage class on GKE named “standard”. You can see this in GCP &rarr; GKE &rarr;
