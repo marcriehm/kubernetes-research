@@ -536,11 +536,11 @@ Note that there is a default storage class on GKE named “standard”. You can 
 Storage &rarr; Storage Classes, or in `kubectl get sc`. In GKE the standard storage class uses standard
 (non-SSD) disks.
 
-To create an SSD storage class, look at [StorageClass/storageclass.yaml](./StorageClass/storageclass.yaml "Create a Storage Class").
+To create an SSD storage class, look at [StorageClasses/storageclass.yaml](./StorageClasses/storageclass.yaml "Create a Storage Class").
 To create a singly-mounted, read-write PersistentVolumeClaim in that class, see
-[StorageClass/storageclass-pvc.yaml](./StorageClass/storageclass-pvc.yaml "Create a PVC for a StorageClass").
+[StorageClasses/storageclass-pvc.yaml](./StorageClasses/storageclass-pvc.yaml "Create a PVC for a StorageClass").
 To create a single Pod which mounts that claim, see
-[StorageClass/storageclass-pod.yaml](./StorageClass/storageclass-pod.yaml "Create a Pod for a Storage Class").
+[StorageClasses/storageclass-pod.yaml](./StorageClasses/storageclass-pod.yaml "Create a Pod for a Storage Class").
 
 ### ConfigMaps
 
