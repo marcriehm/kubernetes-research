@@ -556,7 +556,84 @@ To create a single Pod which mounts that claim, see
 
 ## Authentication and Authorization
 
-...
+### Introduction
+
+Kubernetes does not store users or groups as Objects (entities) in the system. Instead, it extracts user and group (subject) information from the authentication protocol and then associates the resulting opaque string subject ID with roles in a rich REST-based RBAC scheme.
+A real-world authentication and authorization implementation will use groups heavily; these should be well planned in advance. More research needs to be done here.
+Authentication Overview
+Possible authentication mechanisms include HTTP(S) Basic Authentication, Bearer tokens, OpenID Connect, and x509 client-side certificates. Note that OIDC can facilitate integration Active Directory with Kubernetes. This document discusses OIDC/OAuth2 and client-side certs.
+Client-side certificates are not recommended for use in a real project, because there is no way in Kubernetes to revoke a certificate. Once access is granted via a particular certificate, it will always be available. OIDC is the recommended authentication mechanism.
+Kubernetes is - when used properly - a highly secure system, with authentication and authorization utilized intra-system-components, as well as between admin users (presumably using kubectl) and the system. For example, all kubelets authenticate with the API server and with other control-plane components as needed. All communication, intra and inter, should be TLS.
+Kubernetes does not store user and group entities. Rather, a user ID and zero or more group IDs are extracted from the authentication process (i.e. client-side certs). Note that service accounts, which are stored as objects/entities in Kubernetes, should not be used for CLI interactions. Following good practices, service accounts are strictly for use in intra-component communications.
+x509 Certificates
+PKI infrastructure is therefore built into Kubernetes from the ground up. The generation and use of client-side certificates is straightforward.
+An x509 certificate carries a common name (/CN=) and zero or more organizations (/O=). The common name is the Kubernetes user ID and the organizations are the groups. The certificates must be signed by the Kubernetes PKI infrastructure itself; a facilitating API exists and is accessible from kubectl.
+Upon authentication of a user, the API server (which kubectl talks to) validates the certificate and extracts the user and group IDs. It then authorizes the request (see below) and either rejects or processes it. Again, note that users and groups are not "objects" or entities in Kubernetes; they are simply strings.
+Creation of a user involves the following steps:
+1) Create a private key;
+2) Generate a Certificate Signing Request (CSR);
+3) Accept/sign the CSR;
+4) Extract and save the resulting, signed certificate;
+5) (Presumably) configure the certificate into kubectl.
+A script create-cert.sh has been created to perform the first four steps. A script kubectl-config.sh has been created to perform the last step. The first script in particular is not for use outside of development.
+OpenID Connect
+OpenID Connect, or OIDC, is the preferred authentication mechanism. OIDC supports both users and groups. Apparently Kubernetes OIDC can interface with Active Directory, but that has not been explored.
+GKE Considerations
+While Kubernetes has no notion of user or group entities (again, it only knows them as opaque strings), GKE does have user and group entities, and they must be used in the setup of OIDC. Users and groups serve two purposes in GCP/GKE:
+Authentication and authorization for the GCP/GKE web-based UI;
+Authentication and authorization for kubectl/gcloud communications with the GCP/GKE backend.
+I will refer to these users and groups as GCP users and GCP groups.
+GCP users are Google Account users. GCP groups are Google Groups. Both have e-mail addresses associated with them, e.g. someone@gmail.com or somegroup@googlegroups.com. Note that Google Accounts may be associated with any e-mail address and so strictly they do not have to be in the domain gmail.com.
+So, outside of Active Directory / LDAP, to manage groups you need to manage Google Groups.
+To associate a Google Account or Group with GCP the admin user navigates to GCP Main Menu --> IAM and admin --> IAM. Click the Add button near the top and enter in the e-mail address of the user or the group. The suggested initial roles to add are Project.Viewer and Kubernetes Engine.Kubernetes Engine Developer, but more research needs to be done here. Again, these credentials and permissions control communication between gcloud/kubectl and the backend, and I believe they also control permissions on the GCP/GKE UI.
+kubectl config
+kubectl is the primary Kubernetes administration tool; it is a CLI. To handle real-world use cases, it is possible to associate multiple clusters, namespaces, and users together into contexts. Users can easily switch contexts, changing the environment they're operating against.
+kubectl config information is stored in ~/.kube/config, in yaml format. The kubectl CLI has a set of commands which simplify the management of the config file and the use of clusters, namespaces, and users. See kubectl config --help.
+Authorization
+Note that this discussion is simplified in some areas for introductory clarity.
+Kubernetes uses a rich, granular, role-based access control (RBAC) mechanism to authorize requests made to the API server (e.g. from kubectl).
+Some discussion of the API is warranted. The Kubernetes API is REST-based. Each RESTful command has a verb (e.g. HTTP methods: GET, POST, PUT, DELETE) and a yaml payload. The verb identifies the action and the payload contains the details of the Object against which the action is performed.
+A sample yaml payload, for a ClusterRole (see more below) defintion, is:
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: cluster-role-pod-reader-1
+rules:
+- apiGroups: [""]	# empty because pods are in the default group
+  resources: ["pods"]
+  verbs: ["get", "watch", "list"]
+Every valid Kubernetes yaml payload contains the following top-level entry:
+apiVersion: [API-GROUP/]version
+Examples are:
+apiVersion: apps/v1
+apiVersion: v1
+apiVersion: rbac.authorization.k8s.io/v1
+If API-GROUP is omitted the reference is to the core API group. The apiVersion identifies the version of the "schema" (yaml expectations) for the given API group. Management of Kubernetes Objects is divided into API groups. The yaml payload must be in conformance with the apiVersion.
+Version 1.14 of the api may be found here: https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.14/ .
+Authorization is based on: the user/groups; the namespace; the Object type (e.g. Pod, Deployment, Secret, ...) and the action/verb (HTTP method). If a user has permission to perform the action on the Object in the namespace, the RESTful call will proceed. Otherwise it will fail.
+The RBAC mechanism Kubernetes uses employs four Object types: ClusterRoles, Roles, ClusterRoleBindings, and RoleBindings. The Cluster* Objects are cluster-wide while the Role and RoleBinding objects are namespace-specific. Some Objects (for example, Nodes) are inherently of cluster scope and so the Cluster* forms must be used for them. Other Objects, like Deployments, are namespace-specific and so the non-Cluster forms are appropriate. The following discussion is based on Roles and RoleBindings; the extension to Cluster* is straightforward.
+A Role Object defines:
+A single namespace;
+One or more Object types ("resources");
+One or more RESTful verbs (actions).
+Note that Roles have no association to users or groups.
+A RoleBinding binds a single Role to one or more users and/or to one or more groups. An example ClusterRoleBinding is given below:
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: foo-cluster-role-pod-reader-1
+subjects:
+- kind: User
+  name: foo@bar.com
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: ClusterRole
+  name: cluster-role-pod-reader-1
+  apiGroup: rbac.authorization.k8s.io
+This ClusterRoleBinding grants to the user 'foo@bar.com' the permissions specified in ClusterRole 'cluster-role-pod-reader-1'. Note that if roleRef.kind was given as Group the binding would be for a group rather than a user. Note that multiple subjects (users and groups) may be given in a single RoleBinding.
+Note that the Kubernetes RBAC system is pessimistic: an operation will fail unless the combination of a Role and RoleBinding permits it. Deny style permissions are not needed.
+Clearly the authorization system is very rich. In a thoughtful environment the use of Roles and groups (and namespaces) must be carefully planned and managed.
+
 
 ## Auditing and Logging
 
