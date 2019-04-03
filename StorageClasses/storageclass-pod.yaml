@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: storageclass-pod
+spec:
+  containers:
+  - name: nigelpoulton
+    image: nigelpoulton/k8sbook:latest
+    volumeMounts:
+      - name: storageclass-pvc
+        mountPath: /storageclass-pvc
+        readOnly: false
+  volumes:
+    - name: storageclass-pvc
+      persistentVolumeClaim:
+        claimName: storageclass-pvc
+        readOnly: false

@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pv-disk
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: pv-disk
+  template:
+    metadata:
+      labels:
+        app: pv-disk
+    spec:
+      containers:
+      - name: hello-pod
+        image: nigelpoulton/k8sbook:latest
+        volumeMounts:
+          - name: pv-disk-volume
+            mountPath: /pv-disk-volume
+            readOnly: true
+        ports:
+        - containerPort: 8080
+      volumes:
+        - name: pv-disk-volume
+          persistentVolumeClaim:
+            claimName: pv-disk-pvc
+            readOnly: true
