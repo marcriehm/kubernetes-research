@@ -298,8 +298,6 @@ The *kinds* ("kind" being a Kubernetes concept) of Objects discussed in this doc
 * StorageClasses
 * ConfigMaps
 * Secrets
-* Roles and RoleBindings
-* CertificateSigningRequests
 
 This is not an exhaustive set of Objects, but these are the principal ones for applications.
 
@@ -368,7 +366,7 @@ See:
 * https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/
 * https://cloud.google.com/blog/products/gcp/kubernetes-best-practices-organizing-with-namespaces
 
-Namespaces provide a mechanism to define scopes which logically separate Objects by scope name within Kubernetes.
+*Namespaces* provide a mechanism to define scopes which logically separate Objects by scope name within Kubernetes.
 At a simplistic level, a namespace can be viewed as an isolated, virtual cluster.
 
 Namespaces seem like a good way to separate development users, however the Kubernetes documentation provides the
@@ -392,12 +390,167 @@ This [sample Namespace YAML](./Namespaces/namespace.yaml "Sample Namespace YAML"
 named ‘namespace1’ and which has a Label name=”namespace1”.
 
    
-Common kubectl namespace commands include:
+Common kubectl namespace commands include:  
 &nbsp;&nbsp;&nbsp;`kubectl get namespaces [--show-labels]`  
 &nbsp;&nbsp;&nbsp;`kubectl config set-context CONTEXT-NAME --namespace=NAMESPACE`  
 &nbsp;&nbsp;&nbsp;`kubectl get pods –namespace=NAMESPACE`
 
 The default namespace (if none is given) is named ‘default’.
+
+### Pods and Containers
+
+See:
+* https://kubernetes.io/docs/concepts/workloads/pods/pod-overview/
+
+*Pods* are the smallest application deployment objects in Kubernetes. Pods run on Nodes. Pods run in Docker and
+contain one (usually) or more *Containers*. Each Container contains a single Docker image. Each Pod runs one instance
+of an application, for example a web application. Multiple Pods are used to scale horizontally.
+
+Generally Pods only have one Container in them. Occasionally two (or, rarely, more than two) Containers might
+be deployed in a Pod if the Containers are tightly coupled. Note that there is a special kind of container called
+an initContainer which can perform initialization for a regular container.
+
+Pods have unique storage resources and network addresses. Each Pod gets its own IP address. Containers within a Pod
+share the same: IP address; network namespace; and set of ports. Containers within a Pod may communicate with each
+other through localhost.
+
+Two Containers within a Pod do not share storage space; if you want to do that, you must explicitly arrange for
+it via PersistentVolumeClaims.
+
+Pods may appear and disappear (e.g. due to failure or resource constraints) and should be treated as ephemeral
+entities. Pods are generally not created directly by the user, but rather they are created as sub-Objects from
+a Controller. Creating a Pod directly results in a single point of failure (although Kubernetes will attempt
+to repair the broken Pod); Pods are typically only used directly for situations which require persistent storage,
+like a mysql server. A higher-level Controller should be used whenever possible: a Deployment, StatefulSet,
+DaemonSet, Job, or CronJob; see Controllers, below.
+
+### Controllers
+
+Deployments, StatefulSets, DaemonSets, Jobs, and CronJobs are all types of Pod Controllers. This overloads the
+term “Controller”, but the meaning should be clear from the context. All Controller definitions contain template
+Pod definitions. Those templates are used to create Pods within the Controller.
+
+Note that Deployments are one of the most important Object types in Kubernetes.
+
+#### Deployments
+
+Deployments are perhaps the most common kind of Controller. A Deployment specifies that a number of identical
+Pods be scheduled for creation and execution. Deployments do not say where the Pods are to be run; that is
+determined by the Scheduler. A common example of a Deployment is a web application.
+
+Deployments are one of the most important use cases for declarative configuration. Deployments allow you to:
+* Grow or shrink the number of Pods to adjust for load;
+* Rollout new versions of the Pod/Container images;
+* Rollback an image update.
+
+kubectl get --watch deployment
+
+#### StatefulSets
+
+...
+
+####DaemonSets
+
+...
+
+#### Jobs and CronJobs
+
+See:
+https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion/
+https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/
+HorizontalPodAutoscaler
+
+...
+
+### Services
+
+...
+
+See https://medium.com/google-cloud/understanding-kubernetes-networking-services-f0cb48e4cc82 and https://kubernetes.io/docs/concepts/services-networking/service/ for interesting explanations of how Services are actually implemented using IPVS routing rules.
+
+### Ingresses
+
+...
+
+### PersistentVolumes and PersistentVolumeClaims
+
+See:
+* https://kubernetes.io/docs/concepts/storage/persistent-volumes/
+* https://cloud.google.com/kubernetes-engine/docs/concepts/persistent-volumes
+
+Kubernetes’s *PersistentVolume* and *PersistentVolumeClaim* Objects are the mechanisms to give applications
+persistent storage. A PersistentVolume represents actual storage. A PersistentVolumeClaim is a ticket for a Pod to
+use a PVC.
+
+To use a PersistentVolume, a disk resource must first be created in the cloud provider. The PersistentVolume makes
+the disk known to Kubernetes, and the PersistentVolumeClaim allows an association between Pods and the PersistentVolume.
+
+**Note that what follows in this section is a nuisance. There is a better way to do this which will be explained in
+StorageClasses, below.**
+
+#### Gke disk creation
+
+To create a disk in GKE, navigate to Google Cloud Platform --> Compute Engine --> Disks and hit the Create Disk button. Set the Name to “pv-disk”. Set the Region to be your compute region (e.g. us-central1) and the zone to be your compute zone (e.g. us-central1-a). Leave the Size at 500GB (important for later). Leave all else the same and hit Create.
+Now you need to format the disk to ext4. To do this, we’ll create a temporary Google Compute Engine (GCE) VM Instance. From GCP --> Google Compute Engine --> VM Instances, click Create Instance. Set the region and zone appropriately, as above. You can leave all else unchanged. Wait for the instance to be created. Click on the instance link. Click the Edit button at the top. Scroll down to Additional Disks and click Attach existing disk. Select your “pv-disk” and click the Done button. Scroll down and click Save to attach pv-disk to your instance. You should still be in the VM Instance Details. Near the top, click the Remote Access “SSH” button. Type lsblk and you should see an unmounted block device named sdb. Type sudo mkfs.ext4 -m 0 -F -E lazy_itable_init=0,lazy_journal_init=0,discard /dev/sdb. Wait. Type sudo mkdir -p /mnt/disks/pv-disk. Type sudo mount -o discard,defaults /dev/sdb /mnt/disks/pv-disk. Type sudo chmod a+w /mnt/disks/pv-disk. You’re done. Exit the ssh shell. You don’t need your temporary GCE instance any more so delete it.
+
+#### Kubernetes Volume Creation
+Now that we have the disk created and formatted (phew!)...
+
+Create a PersistentVolume with YAML-LINK. Create a PersistentVolumeClaim with YAML-LINK. Then view the PVC in GCP at Kubernetes Engine --> Storage --> PersistentVolumeClaims. Create a Deployment which uses that PVC with YAML-LINK. Wait for that Deployment to finish.
+
+To see the mounted disk within a Pod of the Deployment, perform the following steps:
+kubectl get pods -l app=pv-disk	# list pods
+Copy one of the pods’ names.
+Kubectl exec -it POD-NAME sh		# open shell in that pod
+ls -aCFl /pv-disk-volume
+mount | grep pv-disk-volume		# look at the mounts
+Note that this example creates a multiply-mounted (multiple pods), read-only disk volume. You can also create a singly-mounted read-write volume, e.g. for a database server. To create a multiply-mounted, read-write volume, you must use something like NFS. I did not explore NFS.
+
+### StorageClasses
+See:
+* https://kubernetes.io/docs/concepts/storage/storage-classes/
+* https://cloud.google.com/kubernetes-engine/docs/how-to/persistent-volumes/ssd-pd
+* https://cloud.google.com/kubernetes-engine/docs/concepts/persistent-volumes
+* https://cloud.google.com/kubernetes-engine/docs/how-to/persistent-volumes/regional-pd
+
+The problem with the PersistentVolume approach is that it doesn’t scale well – for each PVC which is created,
+a disk must be provisioned, formatted, and managed in the back end (e.g. in the cloud provider). *StorageClasses*
+provide a way of bypassing the cloud-specific disk creation step so that Volumes may be created completely
+declaratively.
+
+Note that there is a default storage class on GKE named “standard”. You can see this in GCP &rarr; GKE &rarr;
+Storage &rarr; Storage Classes, or in kubectl get sc. The standard storage class uses standard (non-SSD) disks.
+
+To create an SSD storage class, look at StorageClass/storageclass.yaml. To create a singly-mounted, read-write
+PersistentVolumeClaim, see StorageClass/storageclass-pvc.yaml. To create a single Pod which mounts that claim,
+see StorageClass/storageclass-pod.yaml.
+
+### ConfigMaps
+
+...
+
+### Secrets
+
+...
+
+## The Kubernetes API
+
+...
+
+## Authentication and Authorization
+
+...
+
+## Auditing and Logging
+
+...
+
+## Resource Allocation and Monitoring
+
+...
+
+
+
 
 
 
