@@ -255,18 +255,35 @@ GCP/KE").
 
 ### Overview
 
-Kubernetes *Objects* are the core application-level entities within the system. They are persistent “records of intent”
-within the declarative model. Whenever differences exist between the current Object state (the status) and the declared,
-desired state (the spec), the various Kubernetes control loops and the scheduler work to drive the system towards the
-desired state.
+Kubernetes *Objects* are the core application-level entities within the system; they define your application
+components and structure to Kubernetes. They may be seen as persistent “records of intent” within the declarative
+model - whenever differences exist between the current Object state (the *status*) and the declared,
+desired state (the *spec*), the various Kubernetes control loops and the scheduler work to drive the system towards the
+desired state. Ignoring system version differences, Objects are portable across Kubernetes implementations.
 
 Kubernetes end users will work primarily with Objects, creating, updating, reading, and deleting them (in a declarative
 fashion, of course). Objects are the building blocks for applications, and so it is critical to understand what kinds
 of Objects are available and what their capabilities are.
 
-Objects are also called Resources.
+This site has been designed so that you can easily try out the accompanying YAML examples in your own Kubernetes
+cluster. To create a cluster on Google Cloud Platform, see
+[Create your Own Kubernetes Cluster on GCP/KE](./create_gke_cluster.md "Create your Own Kubernetes Cluster on
+GCP/KE").
 
-The kinds of Objects discussed in this document are:
+YAML definition files are applied as per the following examples:  
+&nbsp;&nbsp;&nbsp;`kubectl apply -f YAMLFILE`	# create Objects from YAMLFILE
+&nbsp;&nbsp;&nbsp;`kubectl delete YAMLFILE`		# delete Objects from YAMLFILE
+&nbsp;&nbsp;&nbsp;`kubectl apply -f - < YAMLFILE`
+
+Active Objects may be viewed per the following examples:
+&nbsp;&nbsp;&nbsp;`kubectl get KIND`                # list Objects of kind KIND
+&nbsp;&nbsp;&nbsp;`kubectl get KIND NAME`           # show high-level info about the named Object
+&nbsp;&nbsp;&nbsp;`kubectl describe KIND NAME`      # show more detailed info about the named Object
+&nbsp;&nbsp;&nbsp;`kubectl get -o yaml KIND NAME`   # get yaml spec and status for the named Object
+
+Objects are also called *Resources*.
+
+The *kinds* ("kind" being a Kubernetes concept) of Objects discussed in this document are:
 * Nodes
 * Namespaces
 * Pods and Containers
@@ -300,9 +317,9 @@ examples are:
 A recommended label strategy may be found at https://kubernetes.io/docs/concepts/overview/working-with-objects/common-labels/ .
 
 *Label Selectors* are used to select sets of objects based on their labels. Example selectors are:
-&nbsp;&nbsp;&nbsp;`environment = prod`
-&nbsp;&nbsp;&nbsp;`tier != frontend`
-&nbsp;&nbsp;&nbsp;`microservice in (authentication, foobar)`
+&nbsp;&nbsp;&nbsp;`environment = prod`  
+&nbsp;&nbsp;&nbsp;`tier != frontend`  
+&nbsp;&nbsp;&nbsp;`microservice in (authentication, foobar)`  
 &nbsp;&nbsp;&nbsp;`KEY`	# select items which have the given key defined
 
 Other selectors include `notin`, Multiple selectors may be used in one selection. An example kubectl usage is:  
@@ -329,4 +346,23 @@ field in the Object spec or status. An example is:
 Annotations are another form of metadata which may be associated with objects. Annotations are descriptive and
 are not used to identify and select objects. The metadata in an annotation can be small or large, structured or
 unstructured, and can include characters not permitted by labels.
+
+### Nodes
+
+See:
+* https://kubernetes.io/docs/concepts/architecture/nodes/
+
+Nodes represent computing resources (virtual or physical machines) on which Pods may run. Typically a Node is
+a VM in the cloud environment. Nodes cannot be created via Kubernetes – they must be created externally in
+the cloud environment and then assigned to Kubernetes. See
+[Create a Node Pool in GKE](./gke_create_node_pool.md "Create a Node Pool in GKE).
+
+Nodes may be queried in Kubernetes; the following are typical kubectl commands:  
+&nbsp;&nbsp;&nbsp;`kubectl get nodes`  
+&nbsp;&nbsp;&nbsp;`kubectl get -o yaml node NAME`  
+&nbsp;&nbsp;&nbsp;`kubectl describe node NAME`
+
+
+
+
 
