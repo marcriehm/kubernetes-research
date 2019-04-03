@@ -247,4 +247,8 @@ basic Kubernetes Engine UI, GCP/KE, for viewing and manipulating some basic Kube
 the KKE UI is found at Main Menu &rarr; Kubernetes Engine. GCP/KE is by no means complete and so kubectl is the
 primary user interface. Significantly, GCP/KE can be used to view performance metrics and logs.
 
+To create your own Kubernetes cluster on Google Kubernetes Engine (GCP/KE), follow the instructions here:
+[Create your Own Kubernetes Cluster on GCP/KE](./create_gke_cluster.md "Create your Own Kubernetes Cluster on
+GCP/KE").
+
 
