@@ -362,6 +362,42 @@ Nodes may be queried in Kubernetes; the following are typical kubectl commands:
 &nbsp;&nbsp;&nbsp;`kubectl get -o yaml node NAME`  
 &nbsp;&nbsp;&nbsp;`kubectl describe node NAME`
 
+### Namespaces
+
+See:
+* https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/
+* https://cloud.google.com/blog/products/gcp/kubernetes-best-practices-organizing-with-namespaces
+
+Namespaces provide a mechanism to define scopes which logically separate Objects by scope name within Kubernetes.
+At a simplistic level, a namespace can be viewed as an isolated, virtual cluster.
+
+Namespaces seem like a good way to separate development users, however the Kubernetes documentation provides the
+following advice: “Namespaces are intended for use in environments with many users spread across multiple teams,
+or projects. For clusters with a few to tens of users, you should not need to create or think about namespaces at
+all. Start using namespaces when you need the features they provide.” Personally Namespaces sound like a good idea
+to keep developers from disrupting one another.
+
+Namespaces should not be used to delineate between dev/qa/prod regions: different clusters should be established
+for each region.
+
+If you use Namespaces, there is an implication on DNS domain names. The fully-qualified domain name of a Service
+is of the form: `service-name.namespace-name.svc.cluster.local`. If you refer to a Service with just service-name,
+it resolves to a service in the current namespace.
+
+Resource limits may be applied to Namespaces, via Resource Quotas. Resource quotas are not discussed in this document.
+
+The Namespace is a part of the current kubectl context.
+
+This [sample Namespace YAML](./Namespaces/namespace.yaml "Sample Namespace YAML") creates a Namespace which is
+named ‘namespace1’ and which has a Label name=”namespace1”.
+
+   
+Common kubectl namespace commands include:
+&nbsp;&nbsp;&nbsp;`kubectl get namespaces [--show-labels]`  
+&nbsp;&nbsp;&nbsp;`kubectl config set-context CONTEXT-NAME --namespace=NAMESPACE`  
+&nbsp;&nbsp;&nbsp;`kubectl get pods –namespace=NAMESPACE`
+
+The default namespace (if none is given) is named ‘default’.
 
 
 
