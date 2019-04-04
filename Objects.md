@@ -202,7 +202,33 @@ control loop.
 A Deployment specifies a template for its Pods. The Pod template determines what each Pod should look like:
 what applications should run inside its containers, which volumes the Pods should mount, its labels, and more.
 
-kubectl get --watch deployment
+You can view Deployments in GCP/KE at Kubernetes Engine &rarr; Workloads.
+
+Typical kubectl commands include:  
+&nbsp;&nbsp;&nbsp;`kubectl apply -f DEPLOYMENT-FILE.yaml`  
+&nbsp;&nbsp;&nbsp;`kubectl get --watch deployment`
+
+Sample Deployment code can be found in [./Deployments](./Deployments "Sample Deployment Code"). The
+[./Deployments/ip-webapp](./Deployments/ip-webapp "Sample Deployment webapp") directory contains a sample JSP
+web application. You can build the project with Maven and create and upload (to docker.io) the relevant Docker images.
+
+There are two versions of the webapp: v1 and v2, which can be used to demonstrate rolling updates. First use kubectl
+to apply [./Deployments/ip-webapp-deploy-1.yaml]. In GCP/KE, navigate to Kubernetes Engine &rarr; Workload and
+you should see your Deployment.
+
+Once the Deployment has finished, expose the webapp on a public IP (!) using a LoadBalancer Service: in GCP/KE,
+click on the ip-webapp Deployment. Select Actions &rarr; Expose. Set the port to 8080 and the Service type
+to Load balancer. Click the Expose button. Navigate to Kubernetes Engine &rarr; Services; you should see your
+LoadBalancer with the status "Creating Service Endpoints". Refresh the page until the status is "Ok". Now you
+should see an EndPoint with a hyperlinked URL. Click on the link. You should see a Tomcat page. Append "/ip-webapp"
+to the URL and hit enter. You should see the webapp.
+
+Architecturally you now have a publicly-exposed endpoint which load balances to three Tomcat instances behind
+it. The ip-webapp prints out the IP address at which Tomcat was hit - this is the (private) IP address of the
+particular Tomcat instance, not the public IP of the balancer itself. The IP address will likely be in the
+CIDR range 10.8.0.0/16. To see the load balancing in effect, press and hold down the refresh/F5 button -
+this refreshes the web page and you should see the private IP address cycle between the three values for
+the three Tomcat instances.
 
 #### StatefulSets
 
