@@ -101,3 +101,4 @@ which simplify the management of the config file and the use of clusters, namesp
 You can edit the `~/.kube/config` files yourself, for example to clean up and make more meaningful the names
 of instances, users, and contexts (the auto-generated ones being full of hashes).
 
+<p align="center"><a href="./API.md">&larr;&nbsp;Previous</a>&nbsp;&vert;&nbsp;<a href="./Authorization.md">Next&nbsp;&rarr;</a></p>
