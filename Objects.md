@@ -213,8 +213,8 @@ Sample Deployment code can be found in [./Deployments](./Deployments "Sample Dep
 web application. You can build the project with Maven and create and upload (to docker.io) the relevant Docker images.
 
 There are two versions of the webapp: v1 and v2, which can be used to demonstrate rolling updates. First use kubectl
-to apply [./Deployments/ip-webapp-deploy-1.yaml]. In GCP/KE, navigate to Kubernetes Engine &rarr; Workload and
-you should see your Deployment.
+to apply [./Deployments/ip-webapp-deploy-1.yaml], i.e. `kubectl apply -f ip-webapp-deploy-1.yaml`. In GCP/KE,
+navigate to Kubernetes Engine &rarr; Workload and you should see your Deployment.
 
 Once the Deployment has finished, expose the webapp on a public IP (!) using a LoadBalancer Service: in GCP/KE,
 click on the ip-webapp Deployment. Select Actions &rarr; Expose. Set the port to 8080 and the Service type
@@ -229,6 +229,13 @@ particular Tomcat instance, not the public IP of the balancer itself. The IP add
 CIDR range 10.8.0.0/16. To see the load balancing in effect, press and hold down the refresh/F5 button -
 this refreshes the web page and you should see the private IP address cycle between the three values for
 the three Tomcat instances.
+
+Next we'll upgrade our webapp to v2 using a rolling update. In GCP/KE, navigate to Kubernetes Engine &rarr;
+Workloads. On the command line, type `kubectl apply -f ip-webapp-deploy-2.yaml`. Then type
+`kubectl get --watch deployment` - you can watch as Kubernetes cycles down Pods of the v1 app and cycles up
+Pods of the v2 app. You can also watch deployment progress in GCP/KE. In the Tomcat window, hit the F5 button
+to see that you now have v2 of the app. Congratulations - you've done a rolling update of a webapp with zero
+downtime!
 
 #### StatefulSets
 
