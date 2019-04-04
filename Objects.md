@@ -196,8 +196,9 @@ Deployments are one of the most important use cases for declarative configuratio
 * Rollout new versions of the Pod/Container images;
 * Rollback an image update.
 
-Deployments are self-healing: if any of the Pods fail, they will be restarted by the Deployment (actually, ReplicaSet)
-control loop.
+Deployments are self-healing: if any of the Pods fail, they will be restarted by the ReplicaSet control loop.
+*ReplicaSets* underlie Deployments (as well as other Controllers) and are responsible for keeping the Pods
+running. You typically should not create ReplicaSets directly (use one of the Controller types).
 
 A Deployment specifies a template for its Pods. The Pod template determines what each Pod should look like:
 what applications should run inside its containers, which volumes the Pods should mount, its labels, and more.
@@ -239,11 +240,37 @@ downtime!
 
 #### StatefulSets
 
-...
+See:
+* https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/
+* https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/
+* https://cloud.google.com/kubernetes-engine/docs/concepts/statefulset
+* https://kubernetes.io/docs/tasks/run-application/run-replicated-stateful-application/ \[replicated mysqld example\]
 
-####DaemonSets
+While Deployments are meant to be for stateless components, *StatefulSets* are controllers which are, as the name
+suggests, meant for stateful ones. Like Deployments, StatefulSets manage (via ReplicaSets) sets of templated Pods.
 
-...
+Unlike Deployments, each Pod in a Statefulset is given a sticky identify, which is an ordinal number. The hostname
+of a Pod in a stateful set is, for example, 'statefulsetname-0'.
+
+The statefulness of a StatefulSet must be managed via PersistentVolumes. I.e. a stateful app needs to have
+somewhere to write state out, and that is done via a PersistentVolume associated with the Pods of the
+StatefulSet.
+
+A common use case for a multi-Pod StatefulSet is a read-write database master with a series of read-only slaves.
+See the mysqld example mentioned above.
+
+Note: Considering the use case of a non-replicated database server, it is not clear that StatefulSets provide any
+real advantage over a single Pod. In both cases, PersistentVolumes must be configured. In both cases Kubernetes
+will manage Pod health and potential restarts.
+
+#### DaemonSets
+
+See:
+* https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/
+* https://cloud.google.com/kubernetes-engine/docs/concepts/daemonset
+* 
+
+A DaemonSet is a controller which guarantees the
 
 #### Jobs and CronJobs
 
