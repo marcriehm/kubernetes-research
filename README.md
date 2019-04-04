@@ -31,11 +31,11 @@ Readers are expected to have basic knowledge of:
 ## Table of Contents
 &nbsp;&nbsp;&nbsp;[Overview](./Overview.md "Overview")  
 &nbsp;&nbsp;&nbsp;[Declarative vs. Imperative Management](./Declarative.md "Declarative vs. Imperative Management")  
-&nbsp;&nbsp;&nbsp;[Archtecture](./Archtecture.md "Archtecture")  
+&nbsp;&nbsp;&nbsp;[Architecture](./Architecture.md "Architecture")  
 &nbsp;&nbsp;&nbsp;[Objects](./Objects.md "Objects")  
 &nbsp;&nbsp;&nbsp;[API](./API.md "API")  
 &nbsp;&nbsp;&nbsp;[Authentication](./Authentication.md "Authentication")  
 &nbsp;&nbsp;&nbsp;[Authorization](./Authorization.md "Authorization")  
 &nbsp;&nbsp;&nbsp;[Auditing and Logging](./Logging.md "Auditing and Logging")  
-&nbsp;&nbsp;&nbsp;[Resource Allocation and Monitoring](./Resources.md "Resource Allocation and Monitoring)  
+&nbsp;&nbsp;&nbsp;[Resource Allocation and Monitoring](./Resources.md "Resource Allocation and Monitoring")  
 
