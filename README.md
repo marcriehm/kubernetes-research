@@ -641,7 +641,8 @@ Next type:
 &nbsp;&nbsp;&nbsp;`gcloud container clusters get-credentials CLUSTER-ID --zone COMPUTE-ZONE --project PROJECT-ID`  
 where CLUSTER-ID is the GKE cluster ID (e.g. 'standard-cluster-1') and COMPUTE-ZONE and PROJECT-ID are the
 GCP compute zone (e.g. 'us-central1-a') and GCP project ID (e.g. 'fast-alligator-123456') respectively. **This
-step exports the OIDC/OAuth2 credentials into ~/.kube/config and sets up a context for subsequent use there.**
+step exports the OIDC/OAuth2 credentials from gcloud into ~/.kube/config for kubectl and sets up a kubectl context
+for subsequent use there.**
 
 #### kubectl config
 
