@@ -80,3 +80,4 @@ and RoleBinding permits it. Deny style permissions are not needed.
 Clearly the authorization system is very rich. In a thoughtful environment the use of Roles and groups (and
 namespaces) must be carefully planned and managed.
 
+<p align="center"><a href="./Authentication.md">&larr;&nbsp;Previous</a>&nbsp;&vert;&nbsp;<a href="./Logging.md">Next&nbsp;&rarr;</a></p>
