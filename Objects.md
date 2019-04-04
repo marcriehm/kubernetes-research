@@ -297,3 +297,4 @@ To create a single Pod which mounts that claim, see
 
 ...
 
+<p align="center"><a href="./Architecture.md">&larr;&nbsp;Previous</a>&nbsp;&vert;&nbsp;<a href="./API.md">Next&nbsp;&rarr;</a></p>
