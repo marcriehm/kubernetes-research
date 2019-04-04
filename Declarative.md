@@ -25,3 +25,4 @@ Note that declarative configurations are self-documenting and lend themselves we
 with imperative statements. Note that a weakness is that you cannot declaratively delete an Object; nevertheless,
 imperative approaches should be used for creation and updating.
 
+<p align="center"><a href="./Overview.md">&larr;&nbsp;Previous</a>&nbsp;&vert;&nbsp;<a href="./Architecture.md">Next&nbsp;&rarr;</a></p>
