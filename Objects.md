@@ -151,7 +151,7 @@ See:
 * https://kubernetes.io/docs/concepts/workloads/pods/pod-overview/
 
 *Pods* are the smallest application deployment objects in Kubernetes. Pods run on Nodes. Pods run in Docker and
-contain one (usually) or more *Containers*. Each Container contains a single Docker image. Each Pod runs one instance
+contain one (usually) or more *Containers*. Each Container runs a single Docker image. Each Pod runs one instance
 of an application, for example a web application. Multiple Pods are used to scale horizontally.
 
 Generally Pods only have one Container in them. Occasionally two (or, rarely, more than two) Containers might
@@ -174,7 +174,7 @@ DaemonSet, Job, or CronJob; see Controllers, below.
 
 ### Controllers
 
-Deployments, StatefulSets, DaemonSets, Jobs, and CronJobs are all types of Pod Controllers. This overloads the
+Deployments, StatefulSets, DaemonSets, Jobs, and CronJobs are all types of Pod *Controllers*. This overloads the
 term “Controller”, but the meaning should be clear from the context. All Controller definitions contain template
 Pod definitions. Those templates are used to create Pods within the Controller.
 
@@ -182,14 +182,25 @@ Note that Deployments are one of the most important Object types in Kubernetes.
 
 #### Deployments
 
-Deployments are perhaps the most common kind of Controller. A Deployment specifies that a number of identical
+See:
+* https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
+* https://cloud.google.com/kubernetes-engine/docs/concepts/deployment
+
+Deployments are perhaps the most common kind of Controller. A Deployment declares that a number of identical
 Pods be scheduled for creation and execution. Deployments do not say where the Pods are to be run; that is
-determined by the Scheduler. A common example of a Deployment is a web application.
+determined by the Scheduler. A common example of a Deployment is a web application or a microservice. Deployments
+typically run stateless services; for a stateful component, consider using a StatefulSet instead.
 
 Deployments are one of the most important use cases for declarative configuration. Deployments allow you to:
 * Grow or shrink the number of Pods to adjust for load;
 * Rollout new versions of the Pod/Container images;
 * Rollback an image update.
+
+Deployments are self-healing: if any of the Pods fail, they will be restarted by the Deployment (actually, ReplicaSet)
+control loop.
+
+A Deployment specifies a template for its Pods. The Pod template determines what each Pod should look like:
+what applications should run inside its containers, which volumes the Pods should mount, its labels, and more.
 
 kubectl get --watch deployment
 
