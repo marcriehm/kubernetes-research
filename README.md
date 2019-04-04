@@ -603,31 +603,32 @@ Creation of a user involves the following steps:
 4. Extract and save the resulting, signed certificate;
 5. (Presumably) configure the certificate into kubectl.
 
-A script create-cert.sh has been created to perform the first four steps. A script kubectl-config.sh has been
+A script [create-cert.sh](./Authentication/create-cert.sh "create-cert.sh") has been created to perform the first
+four steps. A script [kubectl-config.sh](./Authentication/kubectl-config.sh "kubectl-config.sh") has been
 created to perform the last step. The first script in particular is not for use outside of development.
 
 ### OpenID Connect
 OpenID Connect, or OIDC, is the preferred authentication mechanism. OIDC supports both users and groups.
 Apparently Kubernetes OIDC can interface with Active Directory, but that has not been explored.
 
-#### GKE Considerations
-While Kubernetes has no notion of user or group entities (again, it only knows them as opaque strings), GCD/KE does
+#### GCP/KE Considerations
+While Kubernetes has no notion of user or group entities (again, it only knows them as opaque strings), GCP/KE does
 have user and group entities, and they must be used in the setup of OIDC. Users and groups serve two purposes in
 GCP/KE:
-1. Authentication and authorization for the GCP/GKE web-based UI;
-2. Authentication and authorization for kubectl/gcloud communications with the GCP/GKE backend.
+1. Authentication and authorization for the GCP/KE web-based UI;
+2. Authentication and authorization for kubectl/gcloud communications with the GCP/KE backend.
 
 I will refer to these users and groups as GCP users and GCP groups.
 
 GCP users are Google Account users. GCP groups are Google Groups. Both have e-mail addresses associated with
-them, e.g. someone@gmail.com or somegroup@googlegroups.com. Note that Google Accounts may be associated with
+them, e.g. someone\@gmail.com or somegroup\@googlegroups.com. Note that Google Accounts may be associated with
 any e-mail address and so strictly they do not have to be in the domain gmail.com.
 
 So, outside of Active Directory / LDAP, to manage groups you need to manage Google Groups.
 
 To associate a Google Account or Group with GCP the admin user navigates to GCP Main Menu &rarr; IAM and admin
 &rarr; IAM. Click the Add button near the top and enter in the e-mail address of the user or the group. The suggested
-initial roles to add are Project.Viewer and Kubernetes Engine.Kubernetes Engine Developer, but more research needs to
+initial roles to add are `Project.Viewer` and `Kubernetes Engine.Kubernetes Engine Developer`, but more research needs to
 be done here. Again, these credentials and permissions control communication between gcloud/kubectl and the backend,
 and I believe they also control permissions on the GCP/KE UI.
 
@@ -640,6 +641,8 @@ kubectl config information is stored in `~/.kube/config`, in yaml format. The ku
 which simplify the management of the config file and the use of clusters, namespaces, and users. See
 `kubectl config --help`.
 
+...
+
 ## Authorization
 
 Note that this discussion is simplified in some areas for introductory clarity.
@@ -647,9 +650,9 @@ Note that this discussion is simplified in some areas for introductory clarity.
 Kubernetes uses a rich, granular, role-based access control (RBAC) mechanism to authorize requests made to the
 API server (e.g. from kubectl).
 
-Some discussion of the API is warranted. The Kubernetes API is REST-based. Each RESTful command has a verb
-(e.g. HTTP methods: GET, POST, PUT, DELETE) and a yaml payload. The verb identifies the action and the payload
-contains the details of the Object against which the action is performed.
+Some discussion of the API is warranted. The Kubernetes API is REST-based. Each RESTful command has a method
+(e.g. HTTP methods: GET, POST, PUT, DELETE) and a yaml payload. The method identifies the action to be taken
+with the YAML and the payload contains the details of the Object against which the action is performed.
 
 A sample yaml payload, for a ClusterRole (see more below) defintion, is:
 ```yaml
@@ -662,10 +665,12 @@ rules:
   resources: ["pods"]
   verbs: ["get", "watch", "list"]
 ```
+An HTTP POST would be used to create this ClusterRole. The ClusterRole allows verbs "get", "watch", and "list" to
+be performed against "pods", which form part of the core (empty string) apiGroup.
 
 Every valid Kubernetes yaml payload contains the following top-level entry:  
 &nbsp;&nbsp;&nbsp;`apiVersion: [API-GROUP/]version`  
-Examples are:
+Examples are:  
 &nbsp;&nbsp;&nbsp;`apiVersion: apps /v1`  
 &nbsp;&nbsp;&nbsp;`apiVersion: v1  
 &nbsp;&nbsp;&nbsp;`apiVersion: rbac.authorization.k8s.io/v1`
@@ -677,8 +682,8 @@ The yaml payload must be in conformance with the apiVersion.
 Version 1.14 of the api may be found here: https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.14/ .
 
 Authorization is based on: the user/groups; the namespace; the Object type (e.g. Pod, Deployment, Secret, ...) and
-the action/verb (HTTP method). If a user has permission to perform the action on the Object in the namespace, the
-RESTful call will proceed. Otherwise it will fail.
+the verb. If a user has permission to perform the action on the Object in the namespace, the RESTful call will
+proceed. Otherwise it will fail.
 
 The RBAC mechanism Kubernetes uses employs four Object types: ClusterRoles, Roles, ClusterRoleBindings, and
 RoleBindings. The Cluster* Objects are cluster-wide while the Role and RoleBinding objects are namespace-specific.
@@ -710,7 +715,7 @@ roleRef:
   apiGroup: rbac.authorization.k8s.io
 ```
 
-This ClusterRoleBinding grants to the user 'foo@bar.com' the permissions specified in ClusterRole
+This ClusterRoleBinding grants to the user 'foo\@bar.com' the permissions specified in ClusterRole
 'cluster-role-pod-reader-1'. Note that if roleRef.kind was given as Group the binding would be for a group
 rather than a user. Note that multiple subjects (users and groups) may be given in a single RoleBinding.
 
