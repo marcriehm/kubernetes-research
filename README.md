@@ -632,7 +632,19 @@ initial roles to add are `Project.Viewer` and `Kubernetes Engine.Kubernetes Engi
 be done here. Again, these credentials and permissions control communication between gcloud/kubectl and the backend,
 and I believe they also control permissions on the GCP/KE UI.
 
-### kubectl config
+After the Google Accounts and Groups have been associated with GCP, each user needs to configure `gcloud` and `kubectl`
+with their OIDC/OAuth2 credentials. To do this, first type:  
+&nbsp;&nbsp;&nbsp;`gcloud init`  
+This takes the user through a browser OIDC/OAuth2 login process.
+
+Next type:  
+&nbsp;&nbsp;&nbsp;`gcloud container clusters get-credentials CLUSTER-ID --zone COMPUTE-ZONE --project PROJECT-ID`  
+where CLUSTER-ID is the GKE cluster ID (e.g. 'standard-cluster-1') and COMPUTE-ZONE and PROJECT-ID are the
+GCP compute zone (e.g. 'us-central1-a') and GCP project ID (e.g. 'fast-alligator-123456') respectively. **This
+step exports the OIDC/OAuth2 credentials into ~/.kube/config and sets up a context for subsequent use there.**
+
+#### kubectl config
+
 kubectl is the primary Kubernetes administration tool; it is a CLI. To handle real-world use cases, it is possible
 to associate multiple clusters, namespaces, and users together into *contexts*. Users can easily switch contexts,
 changing the environment they're operating against.
@@ -641,7 +653,8 @@ kubectl config information is stored in `~/.kube/config`, in yaml format. The ku
 which simplify the management of the config file and the use of clusters, namespaces, and users. See
 `kubectl config --help`.
 
-...
+You can edit the `~/.kube/config` files yourself, for example to clean up and make more meaningful the names
+of instances, users, and contexts (the auto-generated ones being full of hashes).
 
 ## Authorization
 
