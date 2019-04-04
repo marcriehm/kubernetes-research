@@ -153,3 +153,4 @@ To create your own Kubernetes cluster on Google Kubernetes Engine (GCP/KE), foll
 [Create your Own Kubernetes Cluster on GCP/KE](./create_gke_cluster.md "Create your Own Kubernetes Cluster on
 GCP/KE").
 
+<p align="center"><a href="./Declarative.md">&larr;&nbsp;Previous</a>&nbsp;&vert;&nbsp;<a href="./Objects.md">Next&nbsp;&rarr;</a></p>
