@@ -7,7 +7,7 @@ See:
 
 *Volumes* represent external, non-volatile storage for Pods. The lifetime of a volume may be that of a Pod or it
 may persist beyond the life of any one pod. Some types of volumes may be shared between Containers. Volumes
-may be read-only or read-write.
+may be read-only or read-write. Volumes of Pods are analogous to Volumes of Docker containers.
 
 There is a wide range of volume types; see https://cloud.google.com/kubernetes-engine/docs/concepts/persistent-volumes.
 Some of these volume types are specific to particular environments (i.e. cloud-providers). The types discussed here are:
@@ -19,8 +19,24 @@ Some of these volume types are specific to particular environments (i.e. cloud-p
 Volumes are defined at the level of Pods and they are *mounted* into Containers. For some volume types there may
 be a need to provision external storage separately in the cloud environment.
 
+### hostPath Volumes
 
-Kubernetes’s *PersistentVolume* and *PersistentVolumeClaim* Objects are the mechanisms to give applications
+The following two YAML files
+define hostPath volumes for Containers; hostPath volumes are exactly analogous to docker volumes mounted with
+`docker -v HOST-PATH:CONTAINER-PATH` - they mount storage from the external OS into the Container.
+* [hostPath Pod example](./PersistentVolumes/HostPathPod.yaml "hostPath Pod Example")
+* [hostPath Job example](./PersistentVolumes/HostPathJob.yaml "hostPath Job Example")
+
+### emptyDir Volumes
+
+emptyDir volumes are, as the name implies, initially empty. They cannot be shared between Pods but they may be
+shared read-write between Containers of a Pod. An emptyDir volume might be useful to exchange data between two
+tightly-coupled Containers or as a scratch area, e.g. for disk sorts.
+* [emptyDir Pod example](./PersistentVolumes/EmptyDirPod.yaml "emptyDir Pod Example")
+
+### PersistentVolumes and PersistentVolumeClaims
+
+Kubernetes’s *PersistentVolume* and *PersistentVolumeClaim* Objects are mechanisms to give applications
 persistent storage. A PersistentVolume represents actual storage. A PersistentVolumeClaim is a ticket for a Pod to
 use a PVC.
 
