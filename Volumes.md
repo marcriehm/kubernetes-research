@@ -6,8 +6,8 @@ See:
 * https://cloud.google.com/kubernetes-engine/docs/concepts/persistent-volumes
 
 *Volumes* represent external, non-volatile storage for Pods. The lifetime of a volume may be that of a Pod or it
-may persist beyond the life of any one pod. Some types of volumes may be shared between Containers. Volumes
-may be read-only or read-write. Volumes of Pods are analogous to Volumes of Docker containers.
+may persist beyond the life of any one Pod. Some types of volumes may be shared between Containers. Volumes
+may be read-only or read-write. Volumes of Pods are analogous to volumes of Docker containers.
 
 There is a wide range of volume types; see https://cloud.google.com/kubernetes-engine/docs/concepts/persistent-volumes.
 Some of these volume types are specific to particular environments (i.e. cloud-providers). The types discussed here are:
