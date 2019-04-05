@@ -38,10 +38,10 @@ The *kinds* ("kind" being a Kubernetes concept) of Objects discussed in this doc
 * StatefulSets
 * DaemonSets
 * Jobs and CronJobs
+* Volumes, PersistentVolumes and PersistentVolumeClaims
 * HorizontalPodAutoscalers
 * Services
 * Ingresses
-* PersistentVolumes and PersistentVolumeClaims
 * StorageClasses
 * ConfigMaps
 * Secrets
@@ -163,7 +163,7 @@ share the same: IP address; network namespace; and set of ports. Containers with
 other through localhost.
 
 Two Containers within a Pod do not share storage space; if you want to do that, you must explicitly arrange for
-it via PersistentVolumeClaims.
+it via Volume constructs.
 
 Pods may appear and disappear (e.g. due to failure or resource constraints) and should be treated as ephemeral
 entities. Pods are generally not created directly by the user, but rather they are created as sub-Objects from
@@ -175,10 +175,18 @@ DaemonSet, Job, or CronJob; see Controllers, below.
 ### Controllers
 
 Deployments, StatefulSets, DaemonSets, Jobs, and CronJobs are all types of Pod *Controllers*. This overloads the
-term “Controller”, but the meaning should be clear from the context. All Controller definitions contain template
-Pod definitions. Those templates are used to create Pods within the Controller.
+term “Controller”, but the meaning should be clear from the context. Controllers are higher-level execution
+entities which define Pods. All Controller definitions contain *template* Pod definitions, or *pod-specs*. Those
+templates are used to create Pods within the Controller.
 
-Note that Deployments are one of the most important Object types in Kubernetes.
+#### Pod-specs
+
+When a Controller is instantiated it creates one or more Pods. The Controller definition contains a nested pod template or
+pod-spec. Pod templates may contain all of the attributes of Pods.
+
+An example Pod definition is [here]( "").
+
+An example Job definition, which creates one Pod identical to that one, is [here]( "").
 
 #### Deployments
 
@@ -186,7 +194,7 @@ See:
 * https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
 * https://cloud.google.com/kubernetes-engine/docs/concepts/deployment
 
-Deployments are perhaps the most common kind of Controller. A Deployment declares that a number of identical
+Deployments are perhaps the most common and important kind of Controller. A Deployment declares that a number of identical
 Pods be scheduled for creation and execution. Deployments do not say where the Pods are to be run; that is
 determined by the Scheduler. A common example of a Deployment is a web application or a microservice. Deployments
 typically run stateless services; for a stateful component, consider using a StatefulSet instead.
@@ -196,21 +204,81 @@ Deployments are one of the most important use cases for declarative configuratio
 * Rollout new versions of the Pod/Container images;
 * Rollback an image update.
 
-Deployments are self-healing: if any of the Pods fail, they will be restarted by the Deployment (actually, ReplicaSet)
-control loop.
+Deployments are self-healing: if any of the Pods fail, they will be restarted by the ReplicaSet control loop.
+*ReplicaSets* underlie Deployments (as well as other Controllers) and are responsible for keeping the Pods
+running. You typically should not create ReplicaSets directly (use one of the Controller types).
 
 A Deployment specifies a template for its Pods. The Pod template determines what each Pod should look like:
 what applications should run inside its containers, which volumes the Pods should mount, its labels, and more.
 
-kubectl get --watch deployment
+You can view Deployments in GCP/KE at Kubernetes Engine &rarr; Workloads.
+
+Typical kubectl commands include:  
+&nbsp;&nbsp;&nbsp;`kubectl apply -f DEPLOYMENT-FILE.yaml`  
+&nbsp;&nbsp;&nbsp;`kubectl get --watch deployment`
+
+Sample Deployment code can be found in [./Deployments](./Deployments "Sample Deployment Code"). The
+[./Deployments/ip-webapp](./Deployments/ip-webapp "Sample Deployment webapp") directory contains a sample JSP
+web application. You can build the project with Maven and create and upload (to docker.io) the relevant Docker images.
+
+There are two versions of the webapp: v1 and v2, which can be used to demonstrate rolling updates. First use kubectl
+to apply [./Deployments/ip-webapp-deploy-1.yaml], i.e. `kubectl apply -f ip-webapp-deploy-1.yaml`. In GCP/KE,
+navigate to Kubernetes Engine &rarr; Workload and you should see your Deployment.
+
+Once the Deployment has finished, expose the webapp on a public IP (!) using a LoadBalancer Service: in GCP/KE,
+click on the ip-webapp Deployment. Select Actions &rarr; Expose. Set the port to 8080 and the Service type
+to Load balancer. Click the Expose button. Navigate to Kubernetes Engine &rarr; Services; you should see your
+LoadBalancer with the status "Creating Service Endpoints". Refresh the page until the status is "Ok". Now you
+should see an EndPoint with a hyperlinked URL. Click on the link. You should see a Tomcat page. Append "/ip-webapp"
+to the URL and hit enter. You should see the webapp.
+
+Architecturally you now have a publicly-exposed endpoint which load balances to three Tomcat instances behind
+it. The ip-webapp prints out the IP address at which Tomcat was hit - this is the (private) IP address of the
+particular Tomcat instance, not the public IP of the balancer itself. The IP address will likely be in the
+CIDR range 10.8.0.0/16. To see the load balancing in effect, press and hold down the refresh/F5 button -
+this refreshes the web page and you should see the private IP address cycle between the three values for
+the three Tomcat instances.
+
+Next we'll upgrade our webapp to v2 using a rolling update. In GCP/KE, navigate to Kubernetes Engine &rarr;
+Workloads. On the command line, type `kubectl apply -f ip-webapp-deploy-2.yaml`. Then type
+`kubectl get --watch deployment` - you can watch as Kubernetes cycles down Pods of the v1 app and cycles up
+Pods of the v2 app. You can also watch deployment progress in GCP/KE. In the Tomcat window, hit the F5 button
+to see that you now have v2 of the app. Congratulations - you've done a rolling update of a webapp with zero
+downtime!
 
 #### StatefulSets
 
-...
+See:
+* https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/
+* https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/
+* https://cloud.google.com/kubernetes-engine/docs/concepts/statefulset
+* https://kubernetes.io/docs/tasks/run-application/run-replicated-stateful-application/ \[replicated mysqld example\]
 
-####DaemonSets
+While Deployments are meant to be for stateless components, *StatefulSets* are controllers which are, as the name
+suggests, meant for stateful ones. Like Deployments, StatefulSets manage (via ReplicaSets) sets of templated Pods.
 
-...
+Unlike Deployments, each Pod in a Statefulset is given a sticky identify, which is an ordinal number. The hostname
+of a Pod in a stateful set is, for example, 'statefulsetname-0'.
+
+The statefulness of a StatefulSet must be managed via PersistentVolumes. I.e. a stateful app needs to have
+somewhere to write state out, and that is done via a PersistentVolume associated with the Pods of the
+StatefulSet.
+
+A common use case for a multi-Pod StatefulSet is a read-write database master with a series of read-only slaves.
+See the mysqld example mentioned above.
+
+Note: Considering the use case of a non-replicated database server, it is not clear that StatefulSets provide any
+real advantage over a single Pod. In both cases, PersistentVolumes must be configured. In both cases Kubernetes
+will manage Pod health and potential restarts.
+
+#### DaemonSets
+
+See:
+* https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/
+* https://cloud.google.com/kubernetes-engine/docs/concepts/daemonset
+* 
+
+A DaemonSet is a controller which guarantees the
 
 #### Jobs and CronJobs
 
@@ -231,74 +299,10 @@ See https://medium.com/google-cloud/understanding-kubernetes-networking-services
 
 ...
 
-### PersistentVolumes and PersistentVolumeClaims
+### Volumes, PersistentVolumes and PersistentVolumeClaims
 
-See:
-* https://kubernetes.io/docs/concepts/storage/persistent-volumes/
-* https://cloud.google.com/kubernetes-engine/docs/concepts/persistent-volumes
-
-Kubernetes’s *PersistentVolume* and *PersistentVolumeClaim* Objects are the mechanisms to give applications
-persistent storage. A PersistentVolume represents actual storage. A PersistentVolumeClaim is a ticket for a Pod to
-use a PVC.
-
-To use a PersistentVolume, a disk resource must first be created in the cloud provider. The PersistentVolume makes
-the disk known to Kubernetes, and the PersistentVolumeClaim allows an association between Pods and the PersistentVolume.
-
-**Note that what follows in this section is a nuisance. There is a better way to do this which will be explained in
-StorageClasses, below.**
-
-#### Gke disk creation
-
-To create a Google Compute Engine disk, follow the instructions [here](./PersistentVolumes/gke_disk_creation.md "GCE
-Disk Creation").
-
-#### Kubernetes Volume Creation
-
-Now that we have the disk created and formatted (phew!)...
-
-Create a PersistentVolume with
-[./PersistentVolumes/pv-disk-persistentvolume.yaml](./PersistentVolumes/pv-disk-persistentvolume.yaml "Create a PersistentVolume").
-Create a PersistentVolumeClaim with
-[./PersistentVolumes/pv-disk-persistentvolumeclaim.yaml](./PersistentVolumes/pv-disk-persistentvolumeclaim.yaml "Create a PersistentVolumeClaim").
-Then view the PVC in GCP at Main Menu &rarr; Kubernetes Engine &rarr; Storage &rarr; PersistentVolumeClaims.
-Create a Deployment which uses that PVC with
-[./PersistentVolumes/pv-disk-deployment.yaml](./PersistentVolumes/pv-disk-deployment.yaml "Create a Deployment for the PVC").
-Wait for that Deployment to finish.
-
-To see the mounted disk within a Pod of the Deployment, perform the following steps:
-```
-kubectl get pods -l app=pv-disk	    # list pods
-# Copy one of the pods’ names.
-Kubectl exec -it POD-NAME sh		# open shell in that pod
-ls -aCFl /pv-disk-volume            # here your command executes within the Container of the Pod (docker magic)
-mount | grep pv-disk-volume		    # look at the mounts
-```
-
-Note that this example creates a multiply-mounted (multiple pods), read-only disk volume. You can also create
-a singly-mounted read-write volume, e.g. for a database server. To create a multiply-mounted, read-write volume,
-you must use something like NFS. I did not explore NFS.
-
-### StorageClasses
-See:
-* https://kubernetes.io/docs/concepts/storage/storage-classes/
-* https://cloud.google.com/kubernetes-engine/docs/how-to/persistent-volumes/ssd-pd
-* https://cloud.google.com/kubernetes-engine/docs/concepts/persistent-volumes
-* https://cloud.google.com/kubernetes-engine/docs/how-to/persistent-volumes/regional-pd
-
-The problem with the PersistentVolume approach is that it doesn’t scale well – for each PVC which is created,
-a disk must be provisioned, formatted, and managed in the back end (e.g. in the cloud provider). *StorageClasses*
-provide a way of bypassing the cloud-specific disk creation step so that volumes may be created completely
-declaratively.
-
-Note that there is a default storage class on GKE named “standard”. You can see this in GCP &rarr; GKE &rarr;
-Storage &rarr; Storage Classes, or in `kubectl get sc`. In GKE the standard storage class uses standard
-(non-SSD) disks.
-
-To create an SSD storage class, look at [StorageClasses/storageclass.yaml](./StorageClasses/storageclass.yaml "Create a Storage Class").
-To create a singly-mounted, read-write PersistentVolumeClaim in that class, see
-[StorageClasses/storageclass-pvc.yaml](./StorageClasses/storageclass-pvc.yaml "Create a PVC for a StorageClass").
-To create a single Pod which mounts that claim, see
-[StorageClasses/storageclass-pod.yaml](./StorageClasses/storageclass-pod.yaml "Create a Pod for a Storage Class").
+Volumes are used by Pods to refer to storage that is external to those pods. That storage might be defined at the
+Node level or higher, and may or may not be shareable between Containers or Pods. See [Volumes](./Volumes.md "Volumes").
 
 ### ConfigMaps
 
