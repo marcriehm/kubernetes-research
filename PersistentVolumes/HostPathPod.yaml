@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: host-path-pod
+  labels:
+    name: host-path-pod
+spec:
+  containers:
+  - name: host-path-pod
+    image: busybox
+    command: ['sh', '-c', 'echo Hello from a Pod && ls -l /var/log && sleep 60']
+    volumeMounts:
+    - name: varlog
+      mountPath: /var/log	# the volume 'varlog' is mounted into /var/log
+      readOnly: true
+  volumes:
+  - name: varlog			# create volume 'varlog' at node location /var/log
+    hostPath:
+      path: /var/log
