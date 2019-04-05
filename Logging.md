@@ -21,7 +21,7 @@ Example kubectl log queries are:
 &nbsp;&nbsp;&nbsp;`kubectl logs --help`  
 &nbsp;&nbsp;&nbsp;`kubectl logs --lapp=ip-webapp` - label-based query  
 &nbsp;&nbsp;&nbsp;`kubectl logs deployment/ip-webapp` - logs from first pod (only) of deployment ip-webapp  
-&nbsp;&nbsp;&nbsp;`kubectl get pod -lapp=ip-webapp` - list pods of ip-webapp
+&nbsp;&nbsp;&nbsp;`kubectl get pod -lapp=ip-webapp` - list pods of ip-webapp  
 &nbsp;&nbsp;&nbsp;`kubectl logs POD-NAME` - show logs from particular pod
 
 ### Auditing
