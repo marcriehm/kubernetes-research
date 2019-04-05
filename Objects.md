@@ -181,8 +181,9 @@ templates are used to create Pods within the Controller.
 
 #### Pod-specs
 
-When a Controller is instantiated it creates one or more Pods. The Controller definition contains a nested pod template or
-pod-spec. Pod templates may contain all of the attributes of Pods.
+When a Controller is instantiated it creates one or more Pods. The Controller definition contains a nested pod
+template or pod-spec. The template specifies how to create the Pods of the Controller. Pod templates may contain
+all of the attributes of Pods.
 
 An example Pod definition is [here](./PersistentVolumes/HostPathPod.yaml "Example Pod Definition").
 
