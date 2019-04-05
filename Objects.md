@@ -175,10 +175,18 @@ DaemonSet, Job, or CronJob; see Controllers, below.
 ### Controllers
 
 Deployments, StatefulSets, DaemonSets, Jobs, and CronJobs are all types of Pod *Controllers*. This overloads the
-term “Controller”, but the meaning should be clear from the context. All Controller definitions contain template
-Pod definitions. Those templates are used to create Pods within the Controller.
+term “Controller”, but the meaning should be clear from the context. Controllers are higher-level execution
+entities which define Pods. All Controller definitions contain *template* Pod definitions, or *pod-specs*. Those
+templates are used to create Pods within the Controller.
 
-Note that Deployments are one of the most important Object types in Kubernetes.
+#### Pod-specs
+
+When a Controller is instantiated it creates one or more Pods. The Controller definition contains a nested pod template or
+pod-spec. Pod templates may contain all of the attributes of Pods.
+
+An example Pod definition is [here]( "").
+
+An example Job definition, which creates one Pod identical to that one, is [here]( "").
 
 #### Deployments
 
@@ -186,7 +194,7 @@ See:
 * https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
 * https://cloud.google.com/kubernetes-engine/docs/concepts/deployment
 
-Deployments are perhaps the most common kind of Controller. A Deployment declares that a number of identical
+Deployments are perhaps the most common and important kind of Controller. A Deployment declares that a number of identical
 Pods be scheduled for creation and execution. Deployments do not say where the Pods are to be run; that is
 determined by the Scheduler. A common example of a Deployment is a web application or a microservice. Deployments
 typically run stateless services; for a stateful component, consider using a StatefulSet instead.
