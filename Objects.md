@@ -184,9 +184,10 @@ templates are used to create Pods within the Controller.
 When a Controller is instantiated it creates one or more Pods. The Controller definition contains a nested pod template or
 pod-spec. Pod templates may contain all of the attributes of Pods.
 
-An example Pod definition is [here]( "").
+An example Pod definition is [here](./PersistentVolumes/HostPathPod.yaml "Example Pod Definition").
 
-An example Job definition, which creates one Pod identical to that one, is [here]( "").
+An example Job definition, which creates one Pod identical to that one, is
+[here](./PersistentVolumes/HostPathJob.yaml "Example Controller (Job) Defintion").
 
 #### Deployments
 
