@@ -30,15 +30,15 @@ define hostPath volumes for Containers; hostPath volumes are exactly analogous t
 ### emptyDir Volumes
 
 emptyDir volumes are, as the name implies, initially empty. They cannot be shared between Pods but they may be
-shared read-write between Containers of a Pod. An emptyDir volume might be useful to exchange data between two
+shared read-write between Containers of a single Pod. An emptyDir volume might be useful to exchange data between two
 tightly-coupled Containers or as a scratch area, e.g. for disk sorts.
 * [emptyDir Pod example](./PersistentVolumes/EmptyDirPod.yaml "emptyDir Pod Example")
 
 ### PersistentVolumes and PersistentVolumeClaims
 
-Kubernetes’s *PersistentVolume* and *PersistentVolumeClaim* Objects are mechanisms to give applications
-persistent storage. A PersistentVolume represents actual storage. A PersistentVolumeClaim is a ticket for a Pod to
-use a PVC.
+The Kubernetes way of sharing persistent data between Pods is is through the use of PersistentVolumes and
+PersistentVolumeClaims. A PersistentVolume (PV) represents storage which is independent of any particular Pod.
+A PersistentVolumeClaim (PVC) is a ticket for a Pod to use a PV.
 
 To use a PersistentVolume, a disk resource must first be created in the cloud provider. The PersistentVolume makes
 the disk known to Kubernetes, and the PersistentVolumeClaim allows an association between Pods and the PersistentVolume.
@@ -46,7 +46,7 @@ the disk known to Kubernetes, and the PersistentVolumeClaim allows an associatio
 **Note that what follows in this section is a nuisance. There is a better way to do this which will be explained in
 StorageClasses, below.**
 
-#### Gke disk creation
+#### GCP disk creation
 
 To create a Google Compute Engine disk, follow the instructions [here](./PersistentVolumes/gke_disk_creation.md "GCE
 Disk Creation").
@@ -75,7 +75,7 @@ mount | grep pv-disk-volume		    # look at the mounts
 
 Note that this example creates a multiply-mounted (multiple pods), read-only disk volume. You can also create
 a singly-mounted read-write volume, e.g. for a database server. To create a multiply-mounted, read-write volume,
-you must use something like NFS. I did not explore NFS.
+you must use something like NFS.
 
 ### StorageClasses
 See:
@@ -99,3 +99,6 @@ To create a singly-mounted, read-write PersistentVolumeClaim in that class, see
 To create a single Pod which mounts that claim, see
 [StorageClasses/storageclass-pod.yaml](./StorageClasses/storageclass-pod.yaml "Create a Pod for a Storage Class").
 
+### NFS
+
+See https://github.com/kubernetes/examples/tree/master/staging/volumes/nfs.
