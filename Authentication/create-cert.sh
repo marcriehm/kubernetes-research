@@ -50,5 +50,6 @@ kubectl get csr
 kubectl certificate approve "${CSR}"
 kubectl get csr
 kubectl get csr "${CSR}" -o jsonpath='{.status.certificate}' | base64 -d > "${CRT}"
+chmod u-w,g-w,g-r,o-w,o-r "${CRT}"
 kubectl delete csr "${CSR}"
 rm -f "${CSR}"
