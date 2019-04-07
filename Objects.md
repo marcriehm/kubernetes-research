@@ -168,8 +168,7 @@ it via Volume constructs.
 Pods may appear and disappear (e.g. due to failure or resource constraints) and should be treated as ephemeral
 entities. Pods are generally not created directly by the user, but rather they are created as sub-Objects from
 a Controller. Creating a Pod directly results in a single point of failure (although Kubernetes will attempt
-to repair the broken Pod); Pods are typically only used directly for situations which require persistent storage,
-like a mysql server. A higher-level Controller should be used whenever possible: a Deployment, StatefulSet,
+to repair the broken Pod). A higher-level Controller should be used whenever possible: a Deployment, StatefulSet,
 DaemonSet, Job, or CronJob; see Controllers, below.
 
 ### Controllers
@@ -260,7 +259,7 @@ While Deployments are meant to be for stateless components, *StatefulSets* are c
 suggests, meant for stateful ones. Like Deployments, StatefulSets manage (via ReplicaSets) sets of templated Pods.
 
 Unlike Deployments, each Pod in a Statefulset is given a sticky identify, which is an ordinal number. The hostname
-of a Pod in a stateful set is, for example, 'statefulsetname-0'.
+of a Pod in a stateful set is, for example, 'statefulsetname-0'. Pod behaviour can be changed based on the identity.
 
 The statefulness of a StatefulSet must be managed via PersistentVolumes. I.e. a stateful app needs to have
 somewhere to write state out, and that is done via a PersistentVolume associated with the Pods of the
@@ -269,25 +268,42 @@ StatefulSet.
 A common use case for a multi-Pod StatefulSet is a read-write database master with a series of read-only slaves.
 See the mysqld example mentioned above.
 
-Note: Considering the use case of a non-replicated database server, it is not clear that StatefulSets provide any
-real advantage over a single Pod. In both cases, PersistentVolumes must be configured. In both cases Kubernetes
-will manage Pod health and potential restarts.
+The advantage to using a StatefulSet with one Pod over an explicitly-defined Pod is that StatefulSets will arrange
+for Pod restart if the Node on which the Pod is running fails (while a "bare" Pod would just disappear).
 
 #### DaemonSets
 
 See:
 * https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/
 * https://cloud.google.com/kubernetes-engine/docs/concepts/daemonset
-* 
 
-A DaemonSet is a controller which guarantees the
+A *DaemonSet* is a Controller which arranges for a single Pod to be run on each of a set of matching Nodes (or
+perhaps all Nodes). If a Node is added to or deleted from the cluster, the DaemonSet will spin up or tear down
+a Pod on it. DaemonSets are used within Kubernetes itself to collect Pod logs and Node and Pod performance metrics.
 
 #### Jobs and CronJobs
 
 See:
-https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion/
-https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/
-HorizontalPodAutoscaler
+* https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion/
+* https://cloud.google.com/kubernetes-engine/docs/how-to/jobs
+* https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/
+
+A *Job* is a Controller which runs a set of one or more Pods which are **expected** to terminate (hopefully successfully).
+This is in contrast to a Deployment which runs a set of Pods which are not expected to terminate. Jobs are for batch
+processing.
+
+A Job can run a single Pod or it can run multiple Pods in parallel. If multiple Pods are run, it is up to application
+logic to make sure that the workload is divided properly between them.
+
+The Job itself as well as its Pods are not cleaned up automatically upon Job creation. This is so that logs may be
+checked. Jobs should be cleaned up either manually (via interactive kubectl) or automatically (via a script).
+
+In case of Job failure partway through, Job logic should be written to be idempotent - in other words, so that the
+same logic can be run correctly multiple times.
+
+A *CronJob* is a Job which runs on a regular schedule with cron-like configuration.
+
+#### HorizontalPodAutoscaler
 
 ...
 
