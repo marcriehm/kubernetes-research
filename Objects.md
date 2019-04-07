@@ -309,7 +309,13 @@ A *CronJob* is a Job which runs on a regular schedule with cron-like configurati
 
 ### Services
 
-...
+See:
+* https://kubernetes.io/docs/concepts/services-networking/service/
+* https://cloud.google.com/kubernetes-engine/docs/concepts/service
+
+A *Service* groups together the network endpoints of a set of Pods into a single resource. Services may be load-
+balanced, and may have a public IP address. Examples of Services are a load-balanced webserver front end and a
+back-end microservice.
 
 See https://medium.com/google-cloud/understanding-kubernetes-networking-services-f0cb48e4cc82 and https://kubernetes.io/docs/concepts/services-networking/service/ for interesting explanations of how Services are actually implemented using IPVS routing rules.
 
