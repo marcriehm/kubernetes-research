@@ -313,14 +313,58 @@ See:
 * https://kubernetes.io/docs/concepts/services-networking/service/
 * https://cloud.google.com/kubernetes-engine/docs/concepts/service
 
-A *Service* groups together the network endpoints of a set of Pods into a single resource. Services may be load-
-balanced, and may have a public IP address. Examples of Services are a load-balanced webserver front end and a
-back-end microservice.
+A *Service* groups together the network endpoints of a set of Pods into a single resource, load balancing across
+the Pods. Services may have a public IP address, or they may be private. Examples of Services are a public,
+load-balanced webserver front end and a (private) load-balanced back-end microservice.
 
-Must discuss Pod IP addresses (e.g. 10.0.0.0/8) vs Node IP addresses (e.g. 192.168.0.0/16). A NodePort service
-makes a Pod IP:port combination available on a Node IP:port.
+A Service identifies its underlying Pods via a label selector in YAML path .spec.selector. For example, the
+following Service definition selects Pods which possess the label `app: service_test_pod`:
 
-See https://medium.com/google-cloud/understanding-kubernetes-networking-services-f0cb48e4cc82 and https://kubernetes.io/docs/concepts/services-networking/service/ for interesting explanations of how Services are actually implemented using IPVS routing rules.
+```yaml
+kind: Service
+type: ClusterIP
+apiVersion: v1
+metadata:
+  name: service-test
+spec:
+  selector:
+    app: service_test_pod
+  ports:
+  - port: 80
+    targetPort: http
+```
+A Service load balances traffic across its matching Pods.
+
+Services come in three main *types*:
+1. ClusterIP
+2. NodePort - a superset of ClusterIP
+3. LoadBalancer - a superset of NodePort
+
+A *ClusterIP* service possesses a virtual IP address within the Service network CIDR block (the other networks
+are the Node network and the Pod network). Packets sent to cluster-ip:port will be load balanced to all matching
+pods at pod-ip:targetPort. So you can open up a connection to cluster-ip:port and you will connect, via round-
+robin selection, to one Pod on port targetPort.
+
+While you might imagine something like a proxy server sitting on cluster-ip:port and routing to its Pods, that
+is a misleading picture. In reality there is no entity sitting on the network at cluster-ip:port. The Service is
+implemented as a set of IPVS routing rules on each Node. See
+https://medium.com/google-cloud/understanding-kubernetes-networking-services-f0cb48e4cc82.
+
+A ClusterIP Service has a domain name equal to service-name.NAMESPACE.svc.cluster.local. The domain name should
+be used to connect to the Service.
+
+A *NodePort* Service builds on top of a ClusterIP Service by opening a network port on each Node. Traffic routed
+to node-ip:nodePort will be routed (via IPVS round-robin again) to one of the underlying Pods.
+
+A *LoadBalancer* Service builds on top of a NodePort Service by adding an externally-routable public IP address.
+LoadBalancers can therefore be used for network ingress; see, however, the Ingress
+
+The name LoadBalancer might cause some confusion: it is important to recognize that both ClusterIP and NodePort
+Services are load-balanced in their own rights.
+
+See https://cloud.google.com/kubernetes-engine/docs/concepts/network-overview and
+https://kubernetes.io/docs/concepts/services-networking/service/ for interesting explanations of how Services
+are actually implemented using IPVS routing rules.
 
 ### Ingresses
 
