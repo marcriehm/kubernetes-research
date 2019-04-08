@@ -317,6 +317,9 @@ A *Service* groups together the network endpoints of a set of Pods into a single
 balanced, and may have a public IP address. Examples of Services are a load-balanced webserver front end and a
 back-end microservice.
 
+Must discuss Pod IP addresses (e.g. 10.0.0.0/8) vs Node IP addresses (e.g. 192.168.0.0/16). A NodePort service
+makes a Pod IP:port combination available on a Node IP:port.
+
 See https://medium.com/google-cloud/understanding-kubernetes-networking-services-f0cb48e4cc82 and https://kubernetes.io/docs/concepts/services-networking/service/ for interesting explanations of how Services are actually implemented using IPVS routing rules.
 
 ### Ingresses
