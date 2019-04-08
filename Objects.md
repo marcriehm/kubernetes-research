@@ -357,10 +357,16 @@ A *NodePort* Service builds on top of a ClusterIP Service by opening a network p
 to node-ip:nodePort will be routed (via IPVS round-robin again) to one of the underlying Pods.
 
 A *LoadBalancer* Service builds on top of a NodePort Service by adding an externally-routable public IP address.
-LoadBalancers can therefore be used for network ingress; see, however, the Ingress
+LoadBalancers can therefore be used for network ingress; see, however, the Ingress Object which provides another
+option.
+
+Note that all Services are at Layer 4 in the network stack and so they know nothing of the specific L7
+protocol in use (e.g. HTTP).
 
 The name LoadBalancer might cause some confusion: it is important to recognize that both ClusterIP and NodePort
 Services are load-balanced in their own rights.
+
+See [here](./Services/ip-webapp-loadbalancer.yaml "LoadBalancer example") for an example of LoadBalancer YAML.
 
 See https://cloud.google.com/kubernetes-engine/docs/concepts/network-overview and
 https://kubernetes.io/docs/concepts/services-networking/service/ for interesting explanations of how Services
@@ -368,7 +374,15 @@ are actually implemented using IPVS routing rules.
 
 ### Ingresses
 
-...
+See:
+* https://kubernetes.io/docs/concepts/services-networking/ingress/
+* https://kubernetes.io/docs/concepts/services-networking/ingress/
+
+An Ingress is a publicly-available Layer 7 HTTP(S) proxy. An Ingress can be used instead of a LoadBalancer Service.
+An Ingress can be configured to give services externally-reachable URLs, load balance traffic, terminate SSL, and
+offer name based virtual hosting.
+
+The Service underlying an Ingress **must** be of type NodePort - a ClusterIP Service will not work.
 
 ### Volumes, PersistentVolumes and PersistentVolumeClaims
 
