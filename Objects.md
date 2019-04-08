@@ -378,11 +378,17 @@ See:
 * https://kubernetes.io/docs/concepts/services-networking/ingress/
 * https://kubernetes.io/docs/concepts/services-networking/ingress/
 
-An Ingress is a publicly-available Layer 7 HTTP(S) proxy. An Ingress can be used instead of a LoadBalancer Service.
-An Ingress can be configured to give services externally-reachable URLs, load balance traffic, terminate SSL, and
-offer name based virtual hosting.
+An *Ingress* is a publicly-available Layer 7 HTTP(S) proxy. An Ingress can be used to provide external connectivity as
+an alternative to a LoadBalancer Service. An Ingress can be used to: give services externally-reachable URLs; perform
+fanout based on URL; load balance traffic; terminate SSL; and provide name-based virtual hosting.
 
-The Service underlying an Ingress **must** be of type NodePort - a ClusterIP Service will not work.
+The Service underlying an Ingress **must** be of type NodePort - a ClusterIP Service will not work. Ingresses might
+be implemented by Node.js or a similar system.
+
+Create a NodePort Service by applying [this file](./Ingresses/ip-webapp-nodeip.yaml "NodePort Example"). Create
+an Ingress on this Service with [this file](./Ingresses/ip-webapp-ingress.yaml "Ingress Example"). WAIT for the
+Ingress to be created. Test via the URL http://EXTERNAL-IP/ip-webapp where EXTERNAL-IP is the external IP
+allocated for the Ingress.
 
 ### Volumes, PersistentVolumes and PersistentVolumeClaims
 
