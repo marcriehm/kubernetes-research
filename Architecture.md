@@ -24,7 +24,7 @@ The principal master services are:
 #### kube-apiserver
 
 The API server is often likened to the (memory-less) brain of Kubernetes. It is the front end for the control
-plane. Its interface is RESTful YAML. YAML configuration is declarative,
+plane. Its interface is RESTful JSON (configured by the end user as YAML). YAML configuration is declarative,
 not imperative. The API server acts as the endpoint for both external user connectivity to the Kubernetes cluster as
 well as for many of the internal, intra-component communication needs. The API server is the only component which
 interfaces directly with etcd:
@@ -38,7 +38,7 @@ The API server manages user authentication and authorization.
 The kube-apiserver can scale horizontally.
 
 Some intra-control-plane communication, e.g. between the API server and etcd, seems to be done via gRPC calls (rather
-than RESTful YAML), although this isn’t entirely clear.
+than RESTful JSON), although this isn’t entirely clear.
 
 #### etcd – the cluster store
 
@@ -60,7 +60,7 @@ Etcd is written in Go and its interface is gRPC.
 The Kubernetes Controller Manager (KCM) implements multiple, orthogonal *Control Loops*, each of which monitors the
 cluster in some way and responds to events which occur. Examples of events are: a new Deployment being created; a
 Node going down; a Node reporting that a Container has exited. Control loops drive actual cluster state towards
-the desired state.
+the declared, desired state.
 
 Some of the control loops include:
 * Node controller
@@ -75,7 +75,7 @@ Control loops are also known as *Watch Loops* or *Reconciliation Loops*.
 
 Control loops are orthogonal in that each is specialized to monitor one aspect of Kubernetes. Each controller
 takes care of its own task and does not consider events outside of its domain. Each control loop watches the
-state of the cluster and makes changes to move the current state of the sysgtem into the desired state. Control
+state of the cluster and makes changes to move the current state of the system into the desired state. Control
 loops manage state as follows:
 
 1. Obtain desired state;
