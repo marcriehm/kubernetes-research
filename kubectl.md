@@ -7,13 +7,14 @@ kubectl is the main CLI (and indeed, the main UI) for Kubernetes. kubectl commun
 RESTful JSON. kubectl is "portable" - an instance of kubectl can be used to communicate with any instance of
 Kubernetes (e.g. Linux/Windows).
 
-kubectl 
-
-Attach to a running Pod, like `docker attach`.
-
-`kubectl proxy` to create an HTTP proxy to the API server.
-* http://localhost:8001/api/v1/namespaces/default/services/ip-webapp:http/proxy
-* https://kubernetes.io/docs/tasks/access-kubernetes-api/http-proxy-access-api
+Some significant kubectl commands are:
+* `kubectl create -f FILENAME` or `kubectl apply -f FILENAME` - create or update  the Objects specified in the given YAML file
+* `kubectl get` or `kubectl explain` - get info about the specified Object
+* `kubectl attach` - perform a "Docker attach" to the given Pod/Container
+* `kubectl logs` - view logs from a set of one or more Pods
+* `kubectl top` - get CPU and memory usage information from the given Pod or Node
+* `kubectl proxy` - to create an HTTP proxy to the API server
+* `kubectl port forward` - create a port-forwarded proxy to the given Pod at the given port
 
 ## kubectl contexts
 
