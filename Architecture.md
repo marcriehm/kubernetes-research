@@ -23,11 +23,13 @@ The principal master services are:
 
 #### kube-apiserver
 
-The API server is often likened to the (memory-less) brain of Kubernetes. It is the front end for the control
-plane. Its interface is RESTful JSON (configured by the end user as YAML). YAML configuration is declarative,
-not imperative. The API server acts as the endpoint for both external user connectivity to the Kubernetes cluster as
-well as for many of the internal, intra-component communication needs. The API server is the only component which
-interfaces directly with etcd:
+The [API server (https://kubernetes.io/docs/reference/command-line-tools-reference/kube-apiserver/ "API Server")
+is often likened to the (memory-less) brain of Kubernetes. It is the front end for the control
+plane. The API is accessed by two different protocols: RESTful JSON (configured by the end user as YAML) and
+[gRPC] (https://grpc.io/ "gRPC"). gRPC is used internally within the control plane, while RESTful JSON is used
+in communication with UIs (e.g. kubectl). YAML configuration is declarative, not imperative. The API server acts
+as the endpoint for both external user connectivity to the Kubernetes cluster as well as for many of the internal,
+intra-component communication needs. The API server is the only component which interfaces directly with etcd:
 
 * the API server uses etcd’s watch service to detect divergences in the cluster state (e.g. Nodes going down);
 * the API server updates etcd with declarative, desired state;
@@ -36,9 +38,6 @@ interfaces directly with etcd:
 The API server manages user authentication and authorization.
 
 The kube-apiserver can scale horizontally.
-
-Some intra-control-plane communication, e.g. between the API server and etcd, seems to be done via gRPC calls (rather
-than RESTful JSON), although this isn’t entirely clear.
 
 #### etcd – the cluster store
 
@@ -52,8 +51,9 @@ over Availability (think CAP theorem) in order to ensure correct operations. Ano
 Nigel Poulton\] says that etcd prefers Consistency over Availability and does not tolerate a “split-brain” situation.
 If such a situation arises, Kubernetes will halt updates to the cluster; however, applications should continue to work.
 
-Etcd achieves consistency through the use of the RAFT consensus algorithm and a highly-available replicated log. 
-Etcd is written in Go and its interface is gRPC.
+Etcd achieves consistency through the use of the
+[RAFT consensus algorithm] (https://en.wikipedia.org/wiki/Raft_(computer_science) "RAFT consensus algorithm") and a
+highly-available replicated log. Etcd is written in Go and its interface is gRPC.
 
 #### kube-controller-manager
 
@@ -122,7 +122,7 @@ traffic to the appropriate Pods based on their IP addresses and ports.
 
 The primary user interface for Kubernetes, on any implementation, is a command-line tool called kubectl. kubectl is
 a command-line interface to the kube-apiserver. kubectl is provided as part of the Kubernetes distribution and
-it may be used against any Kubernetes implementation (e.g. GKE, 
+it may be used against any Kubernetes implementation (e.g. GKE, Amazon EKS, Minikube).
 
 #### kubectl
 
@@ -146,7 +146,7 @@ See https://kubernetes.io/docs/reference/kubectl/cheatsheet/.
 
 As part of its [Google Cloud Platform (GCP) UI](https://console.cloud.google.com "GCP Home"), Google provides a
 basic Kubernetes Engine UI, GCP/KE, for viewing and manipulating some basic Kubernetes functionality. Within GCP,
-the KKE UI is found at Main Menu &rarr; Kubernetes Engine. GCP/KE is by no means complete and so kubectl is the
+the GCP/KE UI is found at Main Menu &rarr; Kubernetes Engine. GCP/KE is by no means complete and so kubectl is the
 primary user interface. Significantly, GCP/KE can be used to view performance metrics and logs.
 
 To create your own Kubernetes cluster on Google Kubernetes Engine (GCP/KE), follow the instructions here:
