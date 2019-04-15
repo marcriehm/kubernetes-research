@@ -11,7 +11,9 @@ kubectl
 
 Attach to a running Pod, like `docker attach`.
 
-`kubectl proxy` to create an HTTP proxy to the API server. http://localhost:8001/api/v1/namespaces/default/services/ip-webapp:http/proxy
+`kubectl proxy` to create an HTTP proxy to the API server.
+* http://localhost:8001/api/v1/namespaces/default/services/ip-webapp:http/proxy
+* https://kubernetes.io/docs/tasks/access-kubernetes-api/http-proxy-access-api
 
 ## kubectl contexts
 
