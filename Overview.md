@@ -33,9 +33,9 @@ Kubernetes provides a framework, based on Google's best practices, for managing:
 Kubernetes does not provide:
 * Application build facilities and CI/CD;
 * Application-level services, such as databases, middleware, or frameworks (such as Enterprise Java);
+* Physical or virtual machine management.
 
 But it does provide a platform for such services!
-* Physical or virtual machine management.
 
 Kubernetes is an open-source system written in Go. It was developed originally by Google and is now managed
 by the Cloud Native Computing Foundation and is available on all major cloud platforms. It is under very active
