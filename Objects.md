@@ -5,7 +5,7 @@
 Kubernetes *Objects* are the core application-level entities within the system; they define your application
 components and structure to Kubernetes. They may be seen as persistent “records of intent” within the declarative
 model - whenever differences exist between the current Object state (the *status*) and the declared,
-desired state (the *spec*), the various Kubernetes control loops and the scheduler work to drive the system towards the
+desired state (the *spec*), the various Kubernetes control loops and the scheduler work together to drive the system towards the
 desired state. Ignoring system version differences, Objects are portable across Kubernetes implementations.
 
 Kubernetes end users will work primarily with Objects, creating, updating, reading, and deleting them (in a declarative
@@ -17,9 +17,9 @@ cluster. To create a cluster on Google Cloud Platform, see
 [Create your Own Kubernetes Cluster on GCP/KE](./create_gke_cluster.md "Create your Own Kubernetes Cluster on
 GCP/KE").
 
-YAML definition files are applied as per the following examples:  
-&nbsp;&nbsp;&nbsp;`kubectl apply -f YAMLFILE`	# create Objects from YAMLFILE
-&nbsp;&nbsp;&nbsp;`kubectl delete YAMLFILE`		# delete Objects from YAMLFILE
+YAML definition files are applied as per the following examples: 
+&nbsp;&nbsp;&nbsp;`kubectl apply -f YAMLFILE`	# create Objects from YAMLFILE 
+&nbsp;&nbsp;&nbsp;`kubectl delete YAMLFILE`		# delete Objects from YAMLFILE 
 &nbsp;&nbsp;&nbsp;`kubectl apply -f - < YAMLFILE`
 
 Active Objects may be viewed per the following examples:
