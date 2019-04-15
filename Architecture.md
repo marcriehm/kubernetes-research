@@ -23,6 +23,9 @@ The principal master services are:
 
 #### kube-apiserver
 
+See:
+* https://kubernetes.io/docs/reference/command-line-tools-reference/kube-apiserver/
+
 The [API server (https://kubernetes.io/docs/reference/command-line-tools-reference/kube-apiserver/ "API Server")
 is often likened to the (memory-less) brain of Kubernetes. It is the front end for the control
 plane. The API is accessed by two different protocols: RESTful JSON (configured by the end user as YAML) and
@@ -41,6 +44,9 @@ The kube-apiserver can scale horizontally.
 
 #### etcd – the cluster store
 
+See:
+* https://github.com/etcd-io/etcd/blob/master/Documentation/docs.md
+
 Kubernetes configuration information is stored in the Cluster Store, which is based on the distributed, in-memory,
 key-value data store etcd. The cluster store is the only stateful component in the control plane, and as such it
 stores both the current and desired states of the system, as well as the current state of nodes. Like Kubernetes
@@ -56,6 +62,9 @@ Etcd achieves consistency through the use of the
 highly-available replicated log. Etcd is written in Go and its interface is gRPC.
 
 #### kube-controller-manager
+
+See:
+* https://kubernetes.io/docs/reference/command-line-tools-reference/kube-controller-manager/
 
 The Kubernetes Controller Manager (KCM) implements multiple, orthogonal *Control Loops*, each of which monitors the
 cluster in some way and responds to events which occur. Examples of events are: a new Deployment being created; a
@@ -87,6 +96,9 @@ This logic is at the heart of Kubernetes’s declarative design pattern.
 
 #### kube-scheduler
 
+See:
+* https://kubernetes.io/docs/reference/command-line-tools-reference/kube-scheduler/
+
 The *Scheduler* is responsible for scheduling Pods on Nodes. It looks for new work tasks and assigns them to
 appropriate, healthy nodes. The scheduling of pods is distinct from the running of them; running is not performed
 by kubelets. The Scheduler determines which data plane nodes are capable of running a given pod, and then scores
@@ -97,13 +109,20 @@ Note that the Scheduler is a key component in supporting the declarative executi
 
 #### Cloud-controller-manager
 
+See:
+* https://kubernetes.io/docs/concepts/architecture/cloud-controller/
+
 The *Cloud Controller Manager* (CCM) is similar to the Controller Manager except it houses control loops which
-are cloud-dependent. The CCM manages integrations with underlying cloud technologies and services such as
-load-balancers and storage. At the time of writing, it seems that there is some flux between the KCM and the CCM.
+are cloud-dependent. The CCM provides a plugin model and manages integrations with underlying cloud technologies
+and services such as load-balancers and storage. At the time of writing, it seems that there is some flux between
+the KCM and the CCM.
 
 ### Other Services
 
 #### kubelet
+
+See:
+* https://kubernetes.io/docs/reference/command-line-tools-reference/kubelet/
 
 The *kubelet* is a container-focused service which runs on every data-plane node and is responsible for running
 and monitoring Pods on that Node. The kubelet interfaces with Docker to run applications.
