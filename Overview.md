@@ -7,7 +7,7 @@ straddle both Platform as a Service (PaaS) and Infrastructure as a Service (IaaS
 solution for either).
 
 Kubernetes can be considered to be portable because it provides a logical application architecture which can run
-on any Kubernetes implementation. All of the major logical constructs (Kubernetes Objects) are defined at a
+on any Kubernetes implementation. All of the major logical constructs (Kubernetes *Objects*, or *Resources*) are defined at a
 high-enough level and are complete enough such that most applications (excepting the complex ones) can run on
 it with little regard for the underlying operating environment or the Kubernetes implementation itself. Indeed,
 that abstraction is one of the foundational motivations for the system.
