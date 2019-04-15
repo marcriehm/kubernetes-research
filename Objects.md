@@ -17,15 +17,15 @@ cluster. To create a cluster on Google Cloud Platform, see
 [Create your Own Kubernetes Cluster on GCP/KE](./create_gke_cluster.md "Create your Own Kubernetes Cluster on
 GCP/KE").
 
-YAML definition files are applied as per the following examples: 
-&nbsp;&nbsp;&nbsp;`kubectl apply -f YAMLFILE`	# create Objects from YAMLFILE 
-&nbsp;&nbsp;&nbsp;`kubectl delete YAMLFILE`		# delete Objects from YAMLFILE 
+YAML definition files are applied as per the following examples:  
+&nbsp;&nbsp;&nbsp;`kubectl apply -f YAMLFILE`	# create Objects from YAMLFILE  
+&nbsp;&nbsp;&nbsp;`kubectl delete YAMLFILE`		# delete Objects from YAMLFILE  
 &nbsp;&nbsp;&nbsp;`kubectl apply -f - < YAMLFILE`
 
-Active Objects may be viewed per the following examples:
-&nbsp;&nbsp;&nbsp;`kubectl get KIND`                # list Objects of kind KIND
-&nbsp;&nbsp;&nbsp;`kubectl get KIND NAME`           # show high-level info about the named Object
-&nbsp;&nbsp;&nbsp;`kubectl describe KIND NAME`      # show more detailed info about the named Object
+Active Objects may be viewed per the following examples:  
+&nbsp;&nbsp;&nbsp;`kubectl get KIND`                # list Objects of kind KIND  
+&nbsp;&nbsp;&nbsp;`kubectl get KIND NAME`           # show high-level info about the named Object  
+&nbsp;&nbsp;&nbsp;`kubectl describe KIND NAME`      # show more detailed info about the named Object  
 &nbsp;&nbsp;&nbsp;`kubectl get -o yaml KIND NAME`   # get yaml spec and status for the named Object
 
 Objects are also called *Resources*.
