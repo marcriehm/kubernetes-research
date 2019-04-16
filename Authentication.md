@@ -56,9 +56,9 @@ OpenID Connect, or OIDC, is the preferred authentication mechanism. OIDC support
 Apparently Kubernetes OIDC can interface with Active Directory, but that has not been explored.
 
 #### GCP/KE Considerations
-While Kubernetes has no notion of user or group entities (again, it only knows them as opaque strings), GCP/KE does
-have user and group entities, and they must be used in the setup of OIDC. Users and groups serve two purposes in
-GCP/KE:
+While Kubernetes has no notion of user or group entities (again, it only knows them as opaque strings), the GCP/KE
+web-based UI does have user and group entities, and they must be used in the setup of OIDC. Users and groups serve two
+purposes in GCP/KE:
 1. Authentication and authorization for the GCP/KE web-based UI;
 2. Authentication and authorization for kubectl/gcloud communications with the GCP/KE backend.
 
@@ -86,7 +86,7 @@ Next type:
 where CLUSTER-ID is the GKE cluster ID (e.g. 'standard-cluster-1') and COMPUTE-ZONE and PROJECT-ID are the
 GCP compute zone (e.g. 'us-central1-a') and GCP project ID (e.g. 'fast-alligator-123456') respectively. **This
 step exports the OIDC/OAuth2 credentials from gcloud into ~/.kube/config for kubectl and sets up a kubectl context
-for subsequent use there.**
+for subsequent use there.** After this, kubectl should work.
 
 #### kubectl config
 
