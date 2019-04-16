@@ -38,6 +38,6 @@ Some examples are:
 For POST (create), PUT (update), DELETE (delete) operations, the payload defining the Object is given in JSON in the body of the
 HTTP message. The API docs at https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.12 do a good job of defining
 the Object JSON for all of the kinds of Objects. It is a good idea to familiarize yourself with the API docs as a reference
-for creating declarative files.
+for creating declarative files. Note that the Object schema can change between API versions.
 
 <p align="center"><a href="./Objects.md">&larr;&nbsp;Previous</a>&nbsp;&vert;&nbsp;<a href="./Authentication.md">Next&nbsp;&rarr;</a></p>
