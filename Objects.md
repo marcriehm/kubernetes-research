@@ -308,10 +308,19 @@ A *CronJob* is a Job which runs on a regular schedule with cron-like configurati
 ### HorizontalPodAutoscaler
 
 See:
-* https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
+* https://cloud.google.com/kubernetes-engine/docs/how-to/scaling-apps
 
-A *HorizontalPodAutoscaler* is an object which can automatically perform horizontal scaling on the Pods of a Deployment.
-The HorizontalPodAutoscaler works by examining performance metrics (CPU and memory utilization) 
+This discussion is about the autoscaling/v1 version of autoscaling. New features are under development as autoscaling/v2beta2
+(https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.14/#horizontalpodautoscaler-v2beta2-autoscaling). The new
+features include scaling by memory and by custom resource types.
+
+A *HorizontalPodAutoscaler* (HPA) is an Object which configures horizontal scaling, based on CPU load, of the Pods in a Deployment.
+Scaling is performed by comparing actual CPU resource usage against a target which is set in the HPA spec. The YAML field
+for the target is `spec.targetCPUUtilizationPercentage`. The "utilization" is the ratio between the current average CPU
+usage and the requested amount from the Deployment (`deployment.spec.template.spec.containers[].resources.requests.cpu`);
+when the utilization deviates substantially from the target, the number of Pods is scaled accordingly.
+
+Additional fields include `spec.minReplicas` and `spec.maxReplicas`, which set the obvious limits.
 
 ### Services
 
