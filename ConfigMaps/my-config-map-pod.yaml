@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: my-config-map-pod
+spec:
+  containers:
+  - name: my-config-map-container
+    image: busybox
+    command: ['sh', '-c', 'echo Hello from a Pod && sleep 120']
+    stdin: true
+    tty: true
+    volumeMounts:
+      - name: my-config-map-volume    # reference volume defined below
+        mountPath: /etc/my-config-map
+  volumes:
+  - name: my-config-map-volume
+    configMap:
+      name: my-config-map    # reference the ConfigMap Object

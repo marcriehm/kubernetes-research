@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: my-config-map
+data:
+  my-config-file-1: |
+    my-key-1: my-value-1
+    my-key-2: my-value-2
+    my-key-3: my-value-3
+  my-config-file-2: |
+    my-key-A: my-value-A
+    my-key-B: my-value-B
