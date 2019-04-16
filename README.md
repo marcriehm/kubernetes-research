@@ -26,7 +26,8 @@ separate out the GKE specifics from the Kubernetes generalities.
 Readers are expected to have basic knowledge of:
 * Linux, including the command line;
 * Docker;
-* YAML.
+* YAML and JSON;
+* HTTP.
 
 ## Table of Contents
 &nbsp;&nbsp;&nbsp;[Overview](./Overview.md "Overview")  
