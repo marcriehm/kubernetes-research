@@ -5,8 +5,9 @@ See:
 * https://kubernetes.io/docs/concepts/overview/kubernetes-api/
 * https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.12/ \[Kubernetes version 1.12 API Reference\]
 
-The Kubernetes API Server speaks two languages: [gRPC](https://grpc.io "gRPC") and RESTful JSON (if YAML is used, it is converted
-to JSON before hitting the API server). Either form of communication can be used; they follow the same schema definition and
+The Kubernetes API Server speaks two languages: [gRPC](https://grpc.io "gRPC") and RESTful JSON (when YAML is used, for example
+in declarative files, it is converted
+to JSON before being sent to the API server). Either form of communication can be used; they follow the same schema definition and
 there is a one-to-one mapping between the gRPC syntax and the RESTful one. I believe that intra-component communication between
 Kubernetes components themselves is gRPC. This page discusses the REST API because it is more likely to be encountered by end users.
 
