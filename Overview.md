@@ -24,7 +24,7 @@ Kubernetes provides a framework, based on Google's best practices, for managing:
 * networking;
 * storage;
 * resource management;
-* health montoring and healing;
+* health monitoring and healing;
 * scalability;
 * fault tolerance;
 * logging, including application and audit;
