@@ -3,13 +3,14 @@
 Note that this discussion is simplified in some areas for introductory clarity.
 
 Kubernetes uses a rich, granular, role-based access control (RBAC) mechanism to authorize requests made to the
-API server (e.g. from kubectl).
+API server (e.g. from kubectl). The RBAC mechanism is tied intimately to the API; see
+[API](./API.md "The Kubernetes API") for an introduction to the API.
 
 Some discussion of the API is warranted. The Kubernetes API is REST-based. Each RESTful command has a method
 (e.g. HTTP methods: GET, POST, PUT, DELETE) and a yaml payload. The method identifies the action to be taken
 with the YAML and the payload contains the details of the Object against which the action is performed.
 
-A sample yaml payload, for a ClusterRole (see more below) defintion, is:
+A sample YAML file, for a ClusterRole (see more below) defintion, is:
 ```yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
@@ -20,7 +21,7 @@ rules:
   resources: ["pods"]
   verbs: ["get", "watch", "list"]
 ```
-An HTTP POST would be used to create this ClusterRole. The ClusterRole allows verbs "get", "watch", and "list" to
+`kubectl create -f` would be used to create this ClusterRole. The ClusterRole allows verbs "get", "watch", and "list" to
 be performed against "pods", which form part of the core (empty string) apiGroup.
 
 Every valid Kubernetes yaml payload contains the following top-level entry:  
