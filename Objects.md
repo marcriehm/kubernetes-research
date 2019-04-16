@@ -322,7 +322,7 @@ when the utilization deviates substantially from the target, the number of Pods 
 
 Additional fields include `spec.minReplicas` and `spec.maxReplicas`, which set the obvious limits.
 
-An example HPA is given here: [./HorizontalPodAutoscalers/hpa.yaml] (./HorizontalPodAutoscalers/hpa.yaml "HPA Example").
+An example HPA is given [here] (./HorizontalPodAutoscalers/hpa.yaml "HPA Example").
 
 ### Services
 
