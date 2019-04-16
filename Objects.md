@@ -54,15 +54,16 @@ This is not an exhaustive set of Objects, but these are the principal ones for a
 #### Labels and Label Selectors
 
 *Labels* are metadata key/value pairs which are associated with Objects. They are used for identifying Objects,
-particularly in groups. Key syntax is \[domain-name/\]label-name, where \[domain-name\] is optional. Some label
-examples are:
+particularly in groups; this may be for end-user queries or it might be to compose a higher-level object, like a
+Service. Key syntax is \[domain-name/\]label-name, where \[domain-name\] is optional. Some label
+examples are:  
 &nbsp;&nbsp;&nbsp;`environment: "dev"`  
 &nbsp;&nbsp;&nbsp;`release: "stable"`  
 &nbsp;&nbsp;&nbsp;`microservice: "authentication"`
 
 A recommended label strategy may be found at https://kubernetes.io/docs/concepts/overview/working-with-objects/common-labels/ .
 
-*Label Selectors* are used to select sets of objects based on their labels. Example selectors are:
+*Label Selectors* are used to select sets of objects based on their labels. Example selectors are:  
 &nbsp;&nbsp;&nbsp;`environment = prod`  
 &nbsp;&nbsp;&nbsp;`tier != frontend`  
 &nbsp;&nbsp;&nbsp;`microservice in (authentication, foobar)`  
@@ -71,15 +72,13 @@ A recommended label strategy may be found at https://kubernetes.io/docs/concepts
 Other selectors include `notin`, Multiple selectors may be used in one selection. An example kubectl usage is:  
 &nbsp;&nbsp;&nbsp;`kubectl get pods -l environment=production,tier=frontend`
 
-Selectors are used in (YAML) service definitions as follows:
+Selectors are used in the creation of Services; you use a Label Selector to identify a group of Pods which are load-balanced
+into a particular Service. In YAML Service definitions, they appear as follows:
 ```yaml
 selector: {
     component : redis
 }
 ```
-
-Label Selectors are used, for example, in Services to associate Pods with Services, defining the set of Pods which
-fulfill a Service.
 
 #### Field Selectors
 
@@ -101,7 +100,7 @@ See:
 Nodes represent computing resources (virtual or physical machines) on which Pods may run. Typically a Node is
 a VM in the cloud environment. Nodes cannot be created via Kubernetes – they must be created externally in
 the cloud environment and then assigned to Kubernetes. See
-[Create a Node Pool in GKE](./gke_create_node_pool.md "Create a Node Pool in GKE).
+[Create a Node Pool in GKE](./gke_create_node_pool.md "Create a Node Pool in GKE").
 
 Nodes may be queried in Kubernetes; the following are typical kubectl commands:  
 &nbsp;&nbsp;&nbsp;`kubectl get nodes`  
@@ -121,9 +120,9 @@ Namespaces seem like a good way to separate development users, however the Kuber
 following advice: “Namespaces are intended for use in environments with many users spread across multiple teams,
 or projects. For clusters with a few to tens of users, you should not need to create or think about namespaces at
 all. Start using namespaces when you need the features they provide.” Personally Namespaces sound like a good idea
-to keep developers from disrupting one another.
+to me to keep developers from disrupting one another.
 
-Namespaces should not be used to delineate between dev/qa/prod regions: different clusters should be established
+Namespaces should not be used to delineate between dev/qa/prod regions: a separate cluster should be established
 for each region.
 
 If you use Namespaces, there is an implication on DNS domain names. The fully-qualified domain name of a Service
@@ -150,25 +149,26 @@ The default namespace (if none is given) is named ‘default’.
 See:
 * https://kubernetes.io/docs/concepts/workloads/pods/pod-overview/
 
-*Pods* are the smallest application deployment objects in Kubernetes. Pods run on Nodes. Pods run in Docker and
-contain one (usually) or more *Containers*. Each Container runs a single Docker image. Each Pod runs one instance
-of an application, for example a web application. Multiple Pods are used to scale horizontally.
+*Pods* are the smallest application deployment objects in Kubernetes. Pods run on Nodes. Pods execute in Docker and
+contain one (usually) or more *Containers*, with each Container running a single Docker image. Each Pod runs one instance
+of an application, for example a web application. Multiple Pods (grouped under a Service) are used to scale the
+application horizontally.
 
 Generally Pods only have one Container in them. Occasionally two (or, rarely, more than two) Containers might
 be deployed in a Pod if the Containers are tightly coupled. Note that there is a special kind of container called
 an initContainer which can perform initialization for a regular container.
 
-Pods have unique storage resources and network addresses. Each Pod gets its own IP address. Containers within a Pod
+Pods have their own, sepearate storage resources and network addresses. Each Pod gets its own IP address. Containers within a Pod
 share the same: IP address; network namespace; and set of ports. Containers within a Pod may communicate with each
 other through localhost.
 
 Two Containers within a Pod do not share storage space; if you want to do that, you must explicitly arrange for
-it via Volume constructs.
+it via Volume constructs (see below).
 
 Pods may appear and disappear (e.g. due to failure or resource constraints) and should be treated as ephemeral
-entities. Pods are generally not created directly by the user, but rather they are created as sub-Objects from
-a Controller. Creating a Pod directly results in a single point of failure (although Kubernetes will attempt
-to repair the broken Pod). A higher-level Controller should be used whenever possible: a Deployment, StatefulSet,
+entities. They are generally not created directly by the user, but rather they are created as sub-Objects from
+a Controller, for example a Deployment. Creating a Pod directly results in a single point of failure (although Kubernetes
+will attempt to repair a broken Pod). A higher-level Controller should be used whenever possible: a Deployment, StatefulSet,
 DaemonSet, Job, or CronJob; see Controllers, below.
 
 ### Controllers
@@ -180,14 +180,16 @@ templates are used to create Pods within the Controller.
 
 #### Pod-specs
 
-When a Controller is instantiated it creates one or more Pods. The Controller definition contains a nested pod
-template or pod-spec. The template specifies how to create the Pods of the Controller. Pod templates may contain
-all of the attributes of Pods.
+When a Controller is instantiated it creates one or more Pods. The Controller's Pod template specifies how to create
+the Pods of the Controller. Pod templates may contain all of the attributes of Pods.
 
-An example Pod definition is [here](./PersistentVolumes/HostPathPod.yaml "Example Pod Definition").
-
-An example Job definition, which creates one Pod identical to that one, is
-[here](./PersistentVolumes/HostPathJob.yaml "Example Controller (Job) Defintion").
+An example Pod definition is [here](./PersistentVolumes/HostPathPod.yaml "Example Pod Definition"). This Pod definition
+is for example only and again, in general, Pods should not be created directly. An example Job definition, which creates
+one Pod identical to that one, is
+[here](./PersistentVolumes/HostPathJob.yaml "Example Controller (Job) Defintion"). This Job runs the shell command
+`echo Hello from a Job && ls -l /var/log && sleep 60` within the
+[Busybox] (https://busybox.net/about.html "About Busybox") Docker image. It also mounts the host's (i.e. Node's)
+directory `/var/log`.
 
 #### Deployments
 
@@ -196,12 +198,12 @@ See:
 * https://cloud.google.com/kubernetes-engine/docs/concepts/deployment
 
 Deployments are perhaps the most common and important kind of Controller. A Deployment declares that a number of identical
-Pods be scheduled for creation and execution. Deployments do not say where the Pods are to be run; that is
-determined by the Scheduler. A common example of a Deployment is a web application or a microservice. Deployments
+Pods be scheduled for creation and execution across the Nodes of a cluster. Deployments do not say where the Pods are to be
+run; that is determined by the Scheduler. A common example of a Deployment is a web application or a microservice. Deployments
 typically run stateless services; for a stateful component, consider using a StatefulSet instead.
 
 Deployments are one of the most important use cases for declarative configuration. Deployments allow you to:
-* Grow or shrink the number of Pods to adjust for load;
+* Grow or shrink the number of a particular kind of Pod to adjust for load;
 * Rollout new versions of the Pod/Container images;
 * Rollback an image update.
 
@@ -303,9 +305,24 @@ same logic can be run correctly multiple times.
 
 A *CronJob* is a Job which runs on a regular schedule with cron-like configuration.
 
-#### HorizontalPodAutoscaler
+### HorizontalPodAutoscaler
 
-...
+See:
+* https://cloud.google.com/kubernetes-engine/docs/how-to/scaling-apps
+
+This discussion is about the autoscaling/v1 version of autoscaling. New features are under development as autoscaling/v2beta2
+(https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.14/#horizontalpodautoscaler-v2beta2-autoscaling). The new
+features include scaling by memory and by custom resource types.
+
+A *HorizontalPodAutoscaler* (HPA) is an Object which configures horizontal scaling, based on CPU load, of the Pods in a Deployment.
+Scaling is performed by comparing actual CPU resource usage against a target which is set in the HPA spec. The YAML field
+for the target is `spec.targetCPUUtilizationPercentage`. The "utilization" is the ratio between the current average CPU
+usage and the requested amount from the Deployment (`deployment.spec.template.spec.containers[].resources.requests.cpu`);
+when the utilization deviates substantially from the target, the number of Pods is scaled accordingly.
+
+Additional fields include `spec.minReplicas` and `spec.maxReplicas`, which set the obvious limits.
+
+An example HPA is given [here] (./HorizontalPodAutoscalers/hpa.yaml "HPA Example").
 
 ### Services
 
