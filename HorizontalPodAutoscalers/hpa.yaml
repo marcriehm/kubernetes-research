@@ -6,8 +6,8 @@ metadata:
 spec:
   maxReplicas: 10
   minReplicas: 3
-  scaleTargetRef:
-    apiVersion: extensions/v1beta1
+  scaleTargetRef:    # specifies the Deployment which is autoscaled
+    apiVersion: apps/v1
     kind: Deployment
     name: ip-webapp
   targetCPUUtilizationPercentage: 80
