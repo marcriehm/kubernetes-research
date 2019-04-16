@@ -13,6 +13,8 @@ Kubernetes components themselves is gRPC. This page discusses the REST API becau
 The API is divided into named groups, for example:
 * \[core\]: Pods
 * apps: 
+* batch: Jobs, CronJobs
+* rbac.authorization.k8s.io: Roles, RoleBindings
 
 The URI syntax is:  
 &nbsp;&nbsp;&nbsp;`/PREFIX[/API-GROUP]/API-VERSION/namespaces/NAMESPACE/OBJECT-KIND-PLURAL[/NAME]?QUERY_PARMS`  
