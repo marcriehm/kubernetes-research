@@ -418,11 +418,13 @@ See:
 * https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-configmap/
 * https://medium.com/google-cloud/kubernetes-configmaps-and-secrets-part-2-3dc37111f0dc
 
-A *ConfigMap* is an Object which stores key-value pair configuration information for use by Pods. Pods can be configured to
+A *ConfigMap* is an Object which stores configuration information for use by Pods. Pods can be configured to
 read ConfigMaps either as environment variables or as files. The file approach is superior because the resulting files
 are dynamic: when a ConfigMap is updated, the corresponding file in a Container is updated (while environment variables
 are set and read once at Pod start time and never change). Note that there are several ways of creating ConfigMaps but
 we'll stick to a declarative mechanism.
+
+Note that ConfigMaps are *not* intended to be used for sensitive information, like passwords. Use Secrets instead.
 
 Create a two-file ConfigMap named 'my-config-map' with
 [this ConfigMap YAML](./ConfigMaps/my-config-map.yaml "Example ConfigMap").
@@ -437,6 +439,21 @@ and type:
 
 ### Secrets
 
-...
+See:
+* https://kubernetes.io/docs/concepts/configuration/secret/
+
+A *Secret* is an Object which is intended to store sensitive configuration information. They are very similar to ConfigMaps,
+except for:
+* The data of a Secret is base64 encoded
+* The value of a Secret is never exposed when using kubectl
+* When mounted into a file for reading by a pod, a `tmpfs` file system is used
+
+**Please note the "Best practices" section in the above URL.**
+
+The file [./Secret/my-secret](./Secret/my-secret "A secret file") contains a Secret value. The file
+[./Secret/my-secret.yaml](./Secret/my-secret.yaml "A Secret YAML definition") contains a template for a Secret
+definition. The file [./Secret/create-my-secret.sh](./Secret/create-my-secret.sh "Secret-processing shell script")
+is an example shell script which creates the Secret. Normally one would never check the Secret value into version control,
+and one would clean up after running any associated scripts.
 
 <p align="center"><a href="./Architecture.md">&larr;&nbsp;Previous</a>&nbsp;&vert;&nbsp;<a href="./API.md">Next&nbsp;&rarr;</a></p>
