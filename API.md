@@ -15,6 +15,7 @@ The API is divided into named groups, for example:
 * apps: Deployments, DaemonSets, ...
 * batch: Jobs, CronJobs, ...
 * rbac.authorization.k8s.io: Roles, RoleBindings, ...
+
 The 'core' group is never explicitly named in the API; it can be thought of as the empty string.
 
 The URI syntax is:  
@@ -28,5 +29,14 @@ where:
 * NAME is an optional Object name, within the namespace and kind; it is not given when querying for a list of Objects.
 * QUERY_PARMS are optional query parameters. Some query parameters include "labelSelector" and "fieldSelector"
 
+Some examples are:
+* `GET /api/v1/namespaces/my-namespace/pods`: list all Pods in namespace 'my-namespace'
+* `PUT /api/v1/namespaces/my-namespace/pods/my-pod`: update Pod 'my-pod' in namespace 'my-namespace'
+* `GET /apis/apps/v1/namespaces/my-namespace/deployments/my-deployment`: get deployment 'my-deployment' in namespace 'my-namespace'
+
+For POST (create), PUT (update), DELETE (delete) operations, the payload defining the Object is given in JSON in the body of the
+HTTP message. The API docs at https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.12 do a good job of defining
+the Object JSON for all of the kinds of Objects. It is a good idea to familiarize yourself with the API docs as a reference
+for creating declarative files.
 
 <p align="center"><a href="./Objects.md">&larr;&nbsp;Previous</a>&nbsp;&vert;&nbsp;<a href="./Authentication.md">Next&nbsp;&rarr;</a></p>
