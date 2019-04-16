@@ -30,3 +30,4 @@ Limits are specified in YAML as:
 
 For an example, see [./Deployments/ip-webapp-deploy-1.yaml](./Deployments/ip-webapp-deploy-1.yaml "Sample Deployment Code").
 
+<p align="center"><a href="./Logging.md">&larr;&nbsp;Previous</a></p>
