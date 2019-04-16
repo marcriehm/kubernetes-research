@@ -322,7 +322,7 @@ when the utilization deviates substantially from the target, the number of Pods 
 
 Additional fields include `spec.minReplicas` and `spec.maxReplicas`, which set the obvious limits.
 
-An example HPA is given [here] (./HorizontalPodAutoscalers/hpa.yaml "HPA Example").
+An example HPA is given [here](./HorizontalPodAutoscalers/hpa.yaml "HPA Example").
 
 ### Services
 
@@ -414,7 +414,26 @@ Node level or higher, and may or may not be shareable between Containers or Pods
 
 ### ConfigMaps
 
-...
+See:
+* https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-configmap/
+* https://medium.com/google-cloud/kubernetes-configmaps-and-secrets-part-2-3dc37111f0dc
+
+A *ConfigMap* is an Object which stores key-value pair configuration information for use by Pods. Pods can be configured to
+read ConfigMaps either as environment variables or as files. The file approach is superior because the resulting files
+are dynamic: when a ConfigMap is updated, the corresponding file in a Container is updated (while environment variables
+are set and read once at Pod start time and never change). Note that there are several ways of creating ConfigMaps but
+we'll stick to a declarative mechanism.
+
+Create a two-file ConfigMap named 'my-config-map' with
+[this ConfigMap YAML](./ConfigMaps/my-config-map.yaml "Example ConfigMap").
+Create a Pod which mounts that ConfigMap, as a directory, with
+[this Pod YAML](./ConfigMaps/my-config-map-pod.yaml "Example Pod for ConfigMap").
+Within two minutes (the lifetime of the Pod), open up a terminal to the Pod with:  
+&nbsp;&nbsp;&nbsp;`kubectl exec -it my-config-map-pod -- sh`  
+and type:  
+&nbsp;&nbsp;&nbsp;`cd /etc/my-config-map`  
+&nbsp;&nbsp;&nbsp;`cat my-config-file-1`
+
 
 ### Secrets
 
