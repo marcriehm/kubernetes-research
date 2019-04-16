@@ -450,10 +450,13 @@ except for:
 
 **Please note the "Best practices" section in the above URL.**
 
+Secrets are an exception to the "declarative rule". Because Secrets contain sensitive information, they should never be
+checked into version control, and they should be stored on disk only temporarily, if at all. The creation of Secrets
+in a prod environment should be done manually.
+
 The file [./Secrets/my-secret](./Secrets/my-secret "A secret file") contains a Secret value. The file
 [./Secrets/my-secret.yaml](./Secrets/my-secret.yaml "A Secret YAML definition") contains a template for a Secret
 definition. The file [./Secrets/create-my-secret.sh](./Secrets/create-my-secret.sh "Secret-processing shell script")
-is an example shell script which creates the Secret. Normally one would never check the Secret value into version control,
-and one would clean up after running any associated scripts.
+is an example shell script which creates the Secret.
 
 <p align="center"><a href="./Architecture.md">&larr;&nbsp;Previous</a>&nbsp;&vert;&nbsp;<a href="./API.md">Next&nbsp;&rarr;</a></p>
