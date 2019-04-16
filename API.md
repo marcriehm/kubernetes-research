@@ -11,18 +11,22 @@ there is a one-to-one mapping between the gRPC syntax and the RESTful one. I bel
 Kubernetes components themselves is gRPC. This page discusses the REST API because it is more likely to be encountered by end users.
 
 The API is divided into named groups, for example:
-* \[core\]: Pods
-* apps: 
-* batch: Jobs, CronJobs
-* rbac.authorization.k8s.io: Roles, RoleBindings
+* \[core\]: Pods, ConfigMaps, Services, EndPoints, ...
+* apps: Deployments, DaemonSets, ...
+* batch: Jobs, CronJobs, ...
+* rbac.authorization.k8s.io: Roles, RoleBindings, ...
+The 'core' group is never explicitly named in the API; it can be thought of as the empty string.
 
 The URI syntax is:  
 &nbsp;&nbsp;&nbsp;`/PREFIX[/API-GROUP]/API-VERSION/namespaces/NAMESPACE/OBJECT-KIND-PLURAL[/NAME]?QUERY_PARMS`  
 where:
-* PREFIX is "/api" for the 'core' group, or "/apis" for other groups
-
-The API is divided into groups
-
+* PREFIX is "/api" for the 'core' group, or "/apis" for other groups.
+* API-GROUP is not given for the 'core' group, or it is the named group, as above.
+* API-VERSION is, by example, "v1", "v2beta1", "v2". The available versions depend on the group.
+* NAMESPACE is the name of a namespace.
+* OBJECT-KIND-PLURAL is, by example, "deployments", "pods", "services"
+* NAME is an optional Object name, within the namespace and kind; it is not given when querying for a list of Objects.
+* QUERY_PARMS are optional query parameters. Some query parameters include "labelSelector" and "fieldSelector"
 
 
 <p align="center"><a href="./Objects.md">&larr;&nbsp;Previous</a>&nbsp;&vert;&nbsp;<a href="./Authentication.md">Next&nbsp;&rarr;</a></p>
