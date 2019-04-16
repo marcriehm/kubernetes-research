@@ -450,9 +450,9 @@ except for:
 
 **Please note the "Best practices" section in the above URL.**
 
-The file [./Secret/my-secret](./Secret/my-secret "A secret file") contains a Secret value. The file
-[./Secret/my-secret.yaml](./Secret/my-secret.yaml "A Secret YAML definition") contains a template for a Secret
-definition. The file [./Secret/create-my-secret.sh](./Secret/create-my-secret.sh "Secret-processing shell script")
+The file [./Secrets/my-secret](./Secrets/my-secret "A secret file") contains a Secret value. The file
+[./Secrets/my-secret.yaml](./Secrets/my-secret.yaml "A Secret YAML definition") contains a template for a Secret
+definition. The file [./Secrets/create-my-secret.sh](./Secrets/create-my-secret.sh "Secret-processing shell script")
 is an example shell script which creates the Secret. Normally one would never check the Secret value into version control,
 and one would clean up after running any associated scripts.
 
