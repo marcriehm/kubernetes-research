@@ -10,7 +10,7 @@ Kubernetes (e.g. Linux/Windows).
 Some significant kubectl commands are:
 * `kubectl create -f FILENAME` or `kubectl apply -f FILENAME` - create or update  the Objects specified in the given YAML file
 * `kubectl get` or `kubectl explain` - get info about the specified Object
-* `kubectl attach` - perform a "Docker attach" to the given Pod/Container
+* `kubectl exec -it POD -- sh` - exec a shell within the given Pod
 * `kubectl logs` - view logs from a set of one or more Pods
 * `kubectl top` - get CPU and memory usage information from the given Pod or Node
 * `kubectl proxy` - to create an HTTP proxy to the API server
