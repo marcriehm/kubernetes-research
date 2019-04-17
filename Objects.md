@@ -2,14 +2,14 @@
 
 ### Overview
 
-Kubernetes *Objects* are the core application-level entities within the system; they define your application
-components and structure to Kubernetes. They may be seen as persistent “records of intent” within the declarative
-model - whenever differences exist between the current Object state (the *status*) and the declared,
+Kubernetes *Objects*, or *Resources* are the core application-level entities within the system; they define your application
+components and structure to Kubernetes. They may be seen as persistent “records of intent” within the
+[declarative model](./Declarative.md "The Declarative Approach") - whenever differences exist between the current Object
+state (the *status*) and the declared,
 desired state (the *spec*), the various Kubernetes control loops and the scheduler work together to drive the system towards the
 desired state. Ignoring system version differences, Objects are portable across Kubernetes implementations.
 
-Kubernetes end users will work primarily with Objects, creating, updating, reading, and deleting them (in a declarative
-fashion, of course). Objects are the building blocks for applications, and so it is critical to understand what kinds
+Kubernetes end users will work primarily with Objects, creating, updating, reading, and deleting them. Objects are the building blocks for applications, and so it is critical to understand what kinds
 of Objects are available and what their capabilities are.
 
 This site has been designed so that you can easily try out the accompanying YAML examples in your own Kubernetes
@@ -27,8 +27,6 @@ Active Objects may be viewed per the following examples:
 &nbsp;&nbsp;&nbsp;`kubectl get KIND NAME`           # show high-level info about the named Object  
 &nbsp;&nbsp;&nbsp;`kubectl describe KIND NAME`      # show more detailed info about the named Object  
 &nbsp;&nbsp;&nbsp;`kubectl get -o yaml KIND NAME`   # get yaml spec and status for the named Object
-
-Objects are also called *Resources*.
 
 The *kinds* ("kind" being a Kubernetes concept) of Objects discussed in this document are:
 * Nodes
@@ -53,15 +51,19 @@ This is not an exhaustive set of Objects, but these are the principal ones for a
 
 #### Labels and Label Selectors
 
+See:
+* https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+
 *Labels* are metadata key/value pairs which are associated with Objects. They are used for identifying Objects,
 particularly in groups; this may be for end-user queries or it might be to compose a higher-level object, like a
-Service. Key syntax is \[domain-name/\]label-name, where \[domain-name\] is optional. Some label
-examples are:  
+Service, from a set of lower-level Objects that are identified by their labels. Key syntax is \[domain-name/\]label-name,
+where \[domain-name\] is optional. Some label examples are:  
 &nbsp;&nbsp;&nbsp;`environment: "dev"`  
 &nbsp;&nbsp;&nbsp;`release: "stable"`  
 &nbsp;&nbsp;&nbsp;`microservice: "authentication"`
 
-A recommended label strategy may be found at https://kubernetes.io/docs/concepts/overview/working-with-objects/common-labels/ .
+A recommended label strategy may be found at https://kubernetes.io/docs/concepts/overview/working-with-objects/common-labels/.
+It is important to derive a consistent approach to labeling.
 
 *Label Selectors* are used to select sets of objects based on their labels. Example selectors are:  
 &nbsp;&nbsp;&nbsp;`environment = prod`  
@@ -86,6 +88,8 @@ Field Selectors are another way of selecting Objects. They are similar to Label 
 field in the Object spec or status. An example is:  
 &nbsp;&nbsp;&nbsp;`kubectl get pods --field-selector status.phase=Running`
 
+Note that Field Selectors are likely to be less efficient in queries than Label Selectors.
+
 #### Annotations
 
 Annotations are another form of metadata which may be associated with objects. Annotations are descriptive and
@@ -98,7 +102,7 @@ See:
 * https://kubernetes.io/docs/concepts/architecture/nodes/
 
 Nodes represent computing resources (virtual or physical machines) on which Pods may run. Typically a Node is
-a VM in the cloud environment. Nodes cannot be created via Kubernetes – they must be created externally in
+a VM in the cloud environment. Nodes cannot be created within Kubernetes itself – they must be created externally in
 the cloud environment and then assigned to Kubernetes. See
 [Create a Node Pool in GKE](./gke_create_node_pool.md "Create a Node Pool in GKE").
 
@@ -116,22 +120,26 @@ See:
 *Namespaces* provide a mechanism to define scopes which logically separate Objects by scope name within Kubernetes.
 At a simplistic level, a namespace can be viewed as an isolated, virtual cluster.
 
-Namespaces seem like a good way to separate development users, however the Kubernetes documentation provides the
+Namespaces seem like a good way to separate development users from each other, however the Kubernetes documentation provides the
 following advice: “Namespaces are intended for use in environments with many users spread across multiple teams,
 or projects. For clusters with a few to tens of users, you should not need to create or think about namespaces at
-all. Start using namespaces when you need the features they provide.” Personally Namespaces sound like a good idea
+all. Start using namespaces when you need the features they provide.” Nevertheless, Namespaces sound like a good idea
 to me to keep developers from disrupting one another.
 
-Namespaces should not be used to delineate between dev/qa/prod regions: a separate cluster should be established
-for each region.
+Namespaces are an inherent part of the [authorization scheme](./Authorization.md "Authorization"); permissions may be
+assigned to individuals or groups based on the Namespace. It is also possible to
+[set resource (CPU and memory) limits](https://kubernetes.io/docs/concepts/policy/resource-quotas "Resource quotas")
+by Namespace.
 
-If you use Namespaces, there is an implication on DNS domain names. The fully-qualified domain name of a Service
+While it is possible to use Namespaces to delineate between dev/qa/prod regions, best practices suggest that a separate
+cluster be established for each region.
+
+If you use Namespaces, there is an implication on DNS domain names (for example, the domain names of services). The
+fully-qualified domain name of a Service
 is of the form: `service-name.namespace-name.svc.cluster.local`. If you refer to a Service with just service-name,
 it resolves to a service in the current namespace.
 
-Resource limits may be applied to Namespaces, via Resource Quotas. Resource quotas are not discussed in this document.
-
-The Namespace is a part of the current kubectl context.
+The Namespace is a part of the current [kubectl](./kubectl.md "Kubectl") context.
 
 This [sample Namespace YAML](./Namespaces/namespace.yaml "Sample Namespace YAML") creates a Namespace which is
 named ‘namespace1’ and which has a Label name=”namespace1”.
@@ -163,10 +171,10 @@ share the same: IP address; network namespace; and set of ports. Containers with
 other through localhost.
 
 Two Containers within a Pod do not share storage space; if you want to do that, you must explicitly arrange for
-it via Volume constructs (see below).
+it via [Volume](./Volumes.md "Volumes") constructs (see below).
 
-Pods may appear and disappear (e.g. due to failure or resource constraints) and should be treated as ephemeral
-entities. They are generally not created directly by the user, but rather they are created as sub-Objects from
+Pods may appear and disappear (e.g. due to failure or resource constraints) and **should be treated as ephemeral
+entities**. They are generally not created directly by the user, but rather they are created as sub-Objects from
 a Controller, for example a Deployment. Creating a Pod directly results in a single point of failure (although Kubernetes
 will attempt to repair a broken Pod). A higher-level Controller should be used whenever possible: a Deployment, StatefulSet,
 DaemonSet, Job, or CronJob; see Controllers, below.
@@ -175,8 +183,8 @@ DaemonSet, Job, or CronJob; see Controllers, below.
 
 Deployments, StatefulSets, DaemonSets, Jobs, and CronJobs are all types of Pod *Controllers*. This overloads the
 term “Controller”, but the meaning should be clear from the context. Controllers are higher-level execution
-entities which define Pods. All Controller definitions contain *template* Pod definitions, or *pod-specs*. Those
-templates are used to create Pods within the Controller.
+entities which define and allow the management of groups of Pods. All Controller definitions contain *template* Pod
+definitions, or *pod-specs*. Those templates are used to define Pods within the Controller.
 
 #### Pod-specs
 
@@ -188,7 +196,7 @@ is for example only and again, in general, Pods should not be created directly. 
 one Pod identical to that one, is
 [here](./PersistentVolumes/HostPathJob.yaml "Example Controller (Job) Defintion"). This Job runs the shell command
 `echo Hello from a Job && ls -l /var/log && sleep 60` within the
-[Busybox] (https://busybox.net/about.html "About Busybox") Docker image. It also mounts the host's (i.e. Node's)
+[Busybox](https://busybox.net/about.html "About Busybox") Docker image. It also mounts the host's (i.e. Node's)
 directory `/var/log`.
 
 #### Deployments
@@ -197,7 +205,7 @@ See:
 * https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
 * https://cloud.google.com/kubernetes-engine/docs/concepts/deployment
 
-Deployments are perhaps the most common and important kind of Controller. A Deployment declares that a number of identical
+Deployments are the most common and important kind of Controller. A Deployment declares that a number of identical
 Pods be scheduled for creation and execution across the Nodes of a cluster. Deployments do not say where the Pods are to be
 run; that is determined by the Scheduler. A common example of a Deployment is a web application or a microservice. Deployments
 typically run stateless services; for a stateful component, consider using a StatefulSet instead.
@@ -223,9 +231,11 @@ Typical kubectl commands include:
 Sample Deployment code can be found in [./Deployments](./Deployments "Sample Deployment Code"). The
 [./Deployments/ip-webapp](./Deployments/ip-webapp "Sample Deployment webapp") directory contains a sample JSP
 web application. You can build the project with Maven and create and upload (to docker.io) the relevant Docker images.
+See the file [build-and-push.sh](./Deployments/ip-webapp/build-and-push.sh "Build script").
 
 There are two versions of the webapp: v1 and v2, which can be used to demonstrate rolling updates. First use kubectl
-to apply [./Deployments/ip-webapp-deploy-1.yaml], i.e. `kubectl apply -f ip-webapp-deploy-1.yaml`. In GCP/KE,
+to apply [./Deployments/ip-webapp-deploy-1.yaml](./Deployments/ip-webapp-deploy-1.yaml "Deploy webapp 1"),
+i.e. `kubectl apply -f ip-webapp-deploy-1.yaml`. In GCP/KE,
 navigate to Kubernetes Engine &rarr; Workload and you should see your Deployment.
 
 Once the Deployment has finished, expose the webapp on a public IP (!) using a LoadBalancer Service: in GCP/KE,
