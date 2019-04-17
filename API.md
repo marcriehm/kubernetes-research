@@ -5,9 +5,10 @@ See:
 * https://kubernetes.io/docs/concepts/overview/kubernetes-api/
 * https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.12/ \[Kubernetes version 1.12 API Reference\]
 
-The Kubernetes API Server speaks two languages: [gRPC](https://grpc.io "gRPC") and RESTful JSON (when YAML is used, for example
-in declarative files, it is converted
-to JSON before being sent to the API server). Either form of communication can be used; they follow the same schema definition and
+The Kubernetes API Server speaks two languages: [gRPC](https://grpc.io "gRPC") and RESTful JSON (I believe it is the case
+that when YAML is used, for example in declarative files, it is converted
+to JSON before being sent to the API server). Either form of communication can be used between components; they follow the same
+schema definition and
 there is a one-to-one mapping between the gRPC syntax and the RESTful one. I believe that intra-component communication between
 Kubernetes components themselves is gRPC. This page discusses the REST API because it is more likely to be encountered by end users.
 
@@ -17,9 +18,16 @@ The API is divided into named groups, for example:
 * batch: Jobs, CronJobs, ...
 * rbac.authorization.k8s.io: Roles, RoleBindings, ...
 
-The 'core' group is never explicitly named in the API; it can be thought of as the empty string.
+Every Kubernetes message contains a field, named apiVersion, which identifies both the API group and the version of the API
+within that group. The format of the apiVersion is: `API-GROUP/API-VERSION`, e.g. `apps/v1`. (Note that the 'core' group is never
+explicitly named in the API; it is just referenced as API-VERSION, e.g. `v1`.) The apiVersion determines the schema of messages,
+i.e. the schema of Kubernetes Objects.
 
-The URI syntax is:  
+As Kubernetes evolves, it is common for multiple versions of the same API-GROUP to co-exist; this implies that multiple versions
+of the Object schema co-exist. For example, in Kubernetes 1.12, there are three versions of HorizontalPodAutoscalers -
+v1, v2beta1, and v2beta2. You have to be careful to align your Object definitions with the desired schema version.
+
+The apiVersion affects the RESTful API URIs. The URI syntax is:  
 &nbsp;&nbsp;&nbsp;`/PREFIX[/API-GROUP]/API-VERSION/namespaces/NAMESPACE/OBJECT-KIND-PLURAL[/NAME]?QUERY_PARMS`  
 where:
 * PREFIX is "/api" for the 'core' group, or "/apis" for other groups.
