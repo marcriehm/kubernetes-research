@@ -43,9 +43,9 @@ Some examples are:
 * `PUT /api/v1/namespaces/my-namespace/pods/my-pod`: update Pod 'my-pod' in namespace 'my-namespace'
 * `GET /apis/apps/v1/namespaces/my-namespace/deployments/my-deployment`: get deployment 'my-deployment' in namespace 'my-namespace'
 
-For POST (create), PUT (update), DELETE (delete) operations, the payload defining the Object is given in JSON in the body of the
+For POST (create), PUT (update), or DELETE (delete) operations, the payload defining the Object is given in JSON in the body of the
 HTTP message. The API docs at https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.12 do a good job of defining
 the Object JSON for all of the kinds of Objects. It is a good idea to familiarize yourself with the API docs as a reference
-for creating declarative files. Note that the Object schema can change between API versions.
+for creating declarative files. Note again that the Object schema can change between API versions.
 
 <p align="center"><a href="./Objects.md">&larr;&nbsp;Previous</a>&nbsp;&vert;&nbsp;<a href="./Authentication.md">Next&nbsp;&rarr;</a></p>
