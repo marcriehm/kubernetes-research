@@ -3,8 +3,14 @@
 Note that this discussion is simplified in some areas for introductory clarity.
 
 Kubernetes uses a rich, granular, role-based access control (RBAC) mechanism to authorize requests made to the
-API server (e.g. from kubectl). The RBAC mechanism is tied intimately to the API; see
+API server (e.g. from kubectl). The RBAC mechanism is tied closely with the API; see
 [API](./API.md "The Kubernetes API") for an introduction to the API.
+
+Once [authenticated](./Authentication.md "Authentication"), a user is presented to the system as a user ID plus one or
+more group IDs. The IDs are opaque strings. When a user accesses a particular API, Kubernetes relates the IDs to roles.
+If a user ...
+
+A role is defined by ...
 
 Some discussion of the API is warranted. The Kubernetes API is REST-based. Each RESTful command has a method
 (e.g. HTTP methods: GET, POST, PUT, DELETE) and a yaml payload. The method identifies the action to be taken
@@ -23,19 +29,6 @@ rules:
 ```
 `kubectl create -f` would be used to create this ClusterRole. The ClusterRole allows verbs "get", "watch", and "list" to
 be performed against "pods", which form part of the core (empty string) apiGroup.
-
-Every valid Kubernetes yaml payload contains the following top-level entry:  
-&nbsp;&nbsp;&nbsp;`apiVersion: [API-GROUP/]version`  
-Examples are:  
-&nbsp;&nbsp;&nbsp;`apiVersion: apps/v1`  
-&nbsp;&nbsp;&nbsp;`apiVersion: v1`  
-&nbsp;&nbsp;&nbsp;`apiVersion: rbac.authorization.k8s.io/v1`
-
-If API-GROUP is omitted the reference is to the core API group. The apiVersion identifies the version of the
-"schema" (yaml expectations) for the given API group. Management of Kubernetes Objects is divided into API groups.
-The yaml payload must be in conformance with the apiVersion.
-
-Version 1.12 of the api may be found here: https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.12/ .
 
 Authorization is based on: the user/groups; the namespace; the Object type (e.g. Pod, Deployment, Secret, ...) and
 the verb. If a user has permission to perform the action on the Object in the namespace, the RESTful call will
