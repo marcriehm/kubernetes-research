@@ -7,11 +7,8 @@ authentication protocols and extracts user and
 group (aka subject) information from the protocol and then associates the resulting opaque string
 subject ID with roles in a rich REST-based RBAC scheme.
 
-A real-world authentication and authorization implementation will use groups heavily; these should be well planned
-in advance.
-
 Possible authentication mechanisms include HTTP(S) Basic Authentication, Bearer tokens, OpenID Connect, and x509
-client-side certificates. Note that OIDC can facilitate integration Active Directory with Kubernetes. This document
+client-side certificates. Note that OIDC can facilitate integration of Active Directory with Kubernetes. This document
 discusses OIDC/OAuth2 and client-side certs.
 
 Client-side certificates are not recommended for use in a real project, because there is no way in Kubernetes to
@@ -23,15 +20,17 @@ intra-system-components, as well as between admin users (presumably using kubect
 kubelets authenticate with the API server and with other control-plane components as needed. All communication,
 intra and inter, should be TLS.
 
-Kubernetes does not store user and group entities. Rather, a user ID and zero or more group IDs are extracted from
-the authentication process (i.e. client-side certs). Note that service accounts, which are stored as objects/entities
-in Kubernetes, should not be used for CLI interactions. Following good practices, service accounts are strictly for
+Note that service accounts, which *are* managed as Objects/entities
+in Kubernetes, should not be used for end-user/CLI interactions. Following good practices, service accounts are strictly for
 use in intra-component communications.
+
+A real-world authentication and authorization implementation will use groups heavily; these should be well planned
+in advance.
 
 ### x509 Certificates
 
-PKI infrastructure is therefore built into Kubernetes from the ground up. The generation and use of client-side
-certificates is straightforward.
+PKI infrastructure is built into Kubernetes from the ground up. The generation and use of client-side
+certificates is therefore straightforward.
 
 An x509 certificate carries a common name (/CN=) and zero or more organizations (/O=). The common name is the
 Kubernetes user ID and the organizations are the groups. The certificates must be signed by the Kubernetes PKI
@@ -91,7 +90,7 @@ for subsequent use there.** After this, kubectl should work.
 
 #### kubectl config
 
-kubectl is the primary Kubernetes administration tool; it is a CLI. To handle real-world use cases, it is possible
+[kubectl](./kubectl.md "Kubectl") is the primary Kubernetes administration tool; it is a CLI. To handle real-world use cases, it is possible
 to associate multiple clusters, namespaces, and users together into *contexts*. Users can easily switch contexts,
 changing the environment they're operating against.
 
