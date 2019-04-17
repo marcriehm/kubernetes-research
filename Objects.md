@@ -328,7 +328,7 @@ features include scaling by memory and by custom resource types.
 A *HorizontalPodAutoscaler* (HPA) is an Object which configures horizontal scaling, based on CPU load, of the Pods in a Deployment.
 Scaling is performed by comparing actual CPU resource usage against a target which is set in the HPA spec. The YAML field
 for the target is `spec.targetCPUUtilizationPercentage`. The "utilization" is the ratio between the current average CPU
-usage and the requested amount from the Deployment (`deployment.spec.template.spec.containers[].resources.requests.cpu`);
+usage  and the requested amount from the Deployment (`deployment.spec.template.spec.containers[].resources.requests.cpu`);
 when the utilization deviates substantially from the target, the number of Pods is scaled accordingly.
 
 Additional fields include `spec.minReplicas` and `spec.maxReplicas`, which set the obvious limits.
@@ -446,7 +446,6 @@ Within two minutes (the lifetime of the Pod), open up a terminal to the Pod with
 and type:  
 &nbsp;&nbsp;&nbsp;`cd /etc/my-config-map`  
 &nbsp;&nbsp;&nbsp;`cat my-config-file-1`
-
 
 ### Secrets
 
