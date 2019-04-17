@@ -273,7 +273,8 @@ suggests, meant for stateful ones. Like Deployments, StatefulSets manage (via Re
 Unlike Deployments, each Pod in a Statefulset is given a sticky identify, which is an ordinal number. The hostname
 of a Pod in a stateful set is, for example, 'statefulsetname-0'. Pod behaviour can be changed based on the identity.
 
-The statefulness of a StatefulSet must be managed via PersistentVolumes. I.e. a stateful app needs to have
+The statefulness of a StatefulSet must be managed via
+[PersistentVolumes](./Volumes.md "Volumes"). I.e. a stateful app needs to have
 somewhere to write state out, and that is done via a PersistentVolume associated with the Pods of the
 StatefulSet.
 
