@@ -18,7 +18,7 @@ See the diagram below.
 ![Authorization process](./Authorization.png "Authorization process")
 
 By default, a subject has no privileges to use the API. A Role Object consists of a set of *rules*. A rule represents the
-granting of API access privileges. A rule consists of three things:
+granting of particular API access privileges. A rule consists of three things:
 * One or more apiGroups;
 * One or more resources;
 * One or more *verbs*.
@@ -69,7 +69,8 @@ roleRef:
 
 This ClusterRoleBinding grants to the user 'foo\@bar.com' the permissions specified in ClusterRole
 'cluster-role-pod-reader-1'. Note that if roleRef.kind was given as Group the binding would be for a group
-rather than a user. Note that multiple subjects (users and groups) may be given in a single RoleBinding.
+rather than a user. Note that multiple subjects (users and groups) may be given in a single RoleBinding, however
+only one role reference is possible.
 
 Note that the Kubernetes RBAC system is pessimistic: an operation will fail unless the combination of a Role
 and RoleBinding permits it. Deny style permissions are not needed.
