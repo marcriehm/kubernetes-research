@@ -1,4 +1,4 @@
-## Auditing and Logging
+## Logging and Auditing
 
 See
 * https://kubernetes.io/docs/concepts/cluster-administration/logging/
