@@ -10,7 +10,7 @@ Once [authenticated](./Authentication.md "Authentication"), a user is presented 
 more group IDs. The IDs are opaque strings. When a user accesses a particular API, Kubernetes relates the IDs to roles.
 If a user ...
 
-A role is defined by ...
+![Authorization process](./Authorization.png "Authorization process")
 
 Some discussion of the API is warranted. The Kubernetes API is REST-based. Each RESTful command has a method
 (e.g. HTTP methods: GET, POST, PUT, DELETE) and a yaml payload. The method identifies the action to be taken
