@@ -2,8 +2,9 @@
 
 ### Introduction
 
-Kubernetes does not store users or groups as Objects (entities) in the system. Instead, it extracts user and
-group (subject) information from the authentication protocol and then associates the resulting opaque string
+Kubernetes does not store users or groups as Objects (entities) in the system. Instead, it supports various
+authentication protocols and extracts user and
+group (aka subject) information from the protocol and then associates the resulting opaque string
 subject ID with roles in a rich REST-based RBAC scheme.
 
 A real-world authentication and authorization implementation will use groups heavily; these should be well planned
@@ -17,7 +18,7 @@ Client-side certificates are not recommended for use in a real project, because 
 revoke a certificate. Once access is granted via a particular certificate, it will always be available. OIDC is
 the recommended authentication mechanism.
 
-Kubernetes is - when used properly - a highly secure system, with authentication and authorization utilized
+Kubernetes is - when used properly - a secure system, with authentication and authorization utilized
 intra-system-components, as well as between admin users (presumably using kubectl) and the system. For example, all
 kubelets authenticate with the API server and with other control-plane components as needed. All communication,
 intra and inter, should be TLS.
