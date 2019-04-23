@@ -37,4 +37,4 @@ The Kubernetes API server maintains an audit log of all requests - both write an
 customizable and is configured via *Policy* objects; see the links above. The log entries take the form of *Event*
 Objects. These can be accessed via `kubectl get events`. 
 
-<p align="center"><a href="./Authorization.md">&larr;&nbsp;Previous</a>&nbsp;&vert;&nbsp;<a href="./Resources.md">Next&nbsp;&rarr;</a></p>
+<p align="center"><a href="./Authorization.md">&larr;&nbsp;Previous</a>&nbsp;&vert;&nbsp;<a href="./Alerting.md">Next&nbsp;&rarr;</a></p>

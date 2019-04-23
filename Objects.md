@@ -469,4 +469,4 @@ The file [./Secrets/my-secret](./Secrets/my-secret "A secret file") contains a S
 definition. The file [./Secrets/create-my-secret.sh](./Secrets/create-my-secret.sh "Secret-processing shell script")
 is an example shell script which creates the Secret.
 
-<p align="center"><a href="./Architecture.md">&larr;&nbsp;Previous</a>&nbsp;&vert;&nbsp;<a href="./API.md">Next&nbsp;&rarr;</a></p>
+<p align="center"><a href="./Architecture.md">&larr;&nbsp;Previous</a>&nbsp;&vert;&nbsp;<a href="./HealthChecking.md">Next&nbsp;&rarr;</a></p>

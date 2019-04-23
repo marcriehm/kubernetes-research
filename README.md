@@ -34,9 +34,12 @@ Readers are expected to have basic knowledge of:
 &nbsp;&nbsp;&nbsp;[Declarative vs. Imperative Management](./Declarative.md "Declarative vs. Imperative Management")  
 &nbsp;&nbsp;&nbsp;[Architecture](./Architecture.md "Architecture")  
 &nbsp;&nbsp;&nbsp;[Objects](./Objects.md "Objects")  
+&nbsp;&nbsp;&nbsp;[Objects](./HealthChecking.md "Health Checking")  
 &nbsp;&nbsp;&nbsp;[API](./API.md "API")  
 &nbsp;&nbsp;&nbsp;[Authentication](./Authentication.md "Authentication")  
 &nbsp;&nbsp;&nbsp;[Authorization](./Authorization.md "Authorization")  
 &nbsp;&nbsp;&nbsp;[Auditing and Logging](./Logging.md "Auditing and Logging")  
+&nbsp;&nbsp;&nbsp;[Alerting](./Alerting.md "Alerting")  
 &nbsp;&nbsp;&nbsp;[Resource Allocation and Monitoring](./Resources.md "Resource Allocation and Monitoring")  
+
 <p align="center"><a href="./Overview.md">Next&nbsp;&rarr;</a></p>

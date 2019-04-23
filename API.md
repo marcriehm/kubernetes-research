@@ -48,4 +48,4 @@ HTTP message. The API docs at https://kubernetes.io/docs/reference/generated/kub
 the Object JSON for all of the kinds of Objects. It is a good idea to familiarize yourself with the API docs as a reference
 for creating declarative files. Note again that the Object schema can change between API versions.
 
-<p align="center"><a href="./Objects.md">&larr;&nbsp;Previous</a>&nbsp;&vert;&nbsp;<a href="./Authentication.md">Next&nbsp;&rarr;</a></p>
+<p align="center"><a href="./HealthChecking.md">&larr;&nbsp;Previous</a>&nbsp;&vert;&nbsp;<a href="./Authentication.md">Next&nbsp;&rarr;</a></p>
