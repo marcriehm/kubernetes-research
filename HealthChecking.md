@@ -5,8 +5,8 @@ See:
 * https://cloud.google.com/blog/products/gcp/kubernetes-best-practices-setting-up-health-checks-with-readiness-and-liveness-probes
 
 Pods need to have their health checked regularly, so that Kubernetes knows:
-1. Which Pods are healthy and can be included in Services;
-2. Which Pods are not healthy and must be restarted.
+1. Which Pods are not healthy and must be restarted.
+2. Which Pods are healthy and can be included in Services;
 
 There are two kinds of health checks:
 1. Liveness probes;
