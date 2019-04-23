@@ -14,7 +14,7 @@ There are two kinds of health checks:
 
 A *Liveness* probe is used periodically throughout a Container's lifetime to make sure that the Container is functioning correctly
 and making progress servicing requests. A *Readiness* probe is used throughout the Container's lifecycle to determine whether
-or not the Container is currently available to accept traffic. Note that it is possible for a
+or not the Container is currently available to accept traffic as part of a Service. Note that it is possible for a
 Container to be Alive but not Ready. Liveness probes are used to determine whether or not a Pod should be killed (and presumably
 restarted). Readiness probes are used to determine whether or not a Pod should have Service traffic sent to it.
 
@@ -22,7 +22,7 @@ Note that if any Container in a Pod is found to be not alive or not ready, the e
 
 **All Pods should have Liveness checks configured.** This is accomplished via the
 [PodSpec.containers\[n\].liveNessProbe](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.12/#probe-v1-core "Liveness Probe")
-sub-object.
+sub-object, for example the PodSpec part of a Deployment.
 
 There are three kinds of Liveness probes, or actions:
 1. exec;
