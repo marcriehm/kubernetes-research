@@ -7,6 +7,7 @@ Engine (GKE).
 
 ## Principal Online Documentation
 The main Kubernetes docs are at http://kubernetes.io/docs. GKE docs are found at https://cloud.google.com/kubernetes-engine/docs.
+Note that in these documents GKE is also known as GCP/KE (Google Cloud Platform / Kubernetes Engine).
 
 ## Scope
 
