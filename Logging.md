@@ -29,6 +29,12 @@ Example kubectl log queries are:
 
 ### Auditing
 
+See:
+* https://kubernetes.io/docs/tasks/debug-application-cluster/audit/
+* https://medium.com/@noqcks/kubernetes-audit-logging-introduction-464a34a53f6c
 
+The Kubernetes API server maintains an audit log of all requests - both write and read - made to a cluster. Event logging is
+customizable and is configured via *Policy* objects; see the links above. The log entries take the form of *Event*
+Objects. These can be accessed via `kubectl get events`. 
 
 <p align="center"><a href="./Authorization.md">&larr;&nbsp;Previous</a>&nbsp;&vert;&nbsp;<a href="./Resources.md">Next&nbsp;&rarr;</a></p>
