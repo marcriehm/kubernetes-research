@@ -34,7 +34,7 @@ Readers are expected to have basic knowledge of:
 &nbsp;&nbsp;&nbsp;[Declarative vs. Imperative Management](./Declarative.md "Declarative vs. Imperative Management")  
 &nbsp;&nbsp;&nbsp;[Architecture](./Architecture.md "Architecture")  
 &nbsp;&nbsp;&nbsp;[Objects](./Objects.md "Objects")  
-&nbsp;&nbsp;&nbsp;[Objects](./HealthChecking.md "Health Checking")  
+&nbsp;&nbsp;&nbsp;[Health Checking](./HealthChecking.md "Health Checking")  
 &nbsp;&nbsp;&nbsp;[API](./API.md "API")  
 &nbsp;&nbsp;&nbsp;[Authentication](./Authentication.md "Authentication")  
 &nbsp;&nbsp;&nbsp;[Authorization](./Authorization.md "Authorization")  
