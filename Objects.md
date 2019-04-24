@@ -339,7 +339,8 @@ This discussion is about the autoscaling/v1 version of autoscaling. New features
 features include scaling by memory and by custom resource types.
 
 A [*HorizontalPodAutoscaler*](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.12/#horizontalpodautoscaler-v2beta2-autoscaling "Horizontal Pod Autoscaler")
-(HPA) is an Object which configures horizontal scaling, based on CPU load, of the Pods in a Deployment.
+(HPA) is an Object which configures horizontal scaling, based on CPU load, of the Pods in a Deployment. Horizontal scaling
+increases the number of Pods in a Deployment to spread the load across a larger number of workers.
 Scaling is performed by comparing actual CPU resource usage against a target which is set in the HPA spec. The YAML field
 for the target is `spec.targetCPUUtilizationPercentage`. The "utilization" is the ratio between the current average CPU
 usage  and the requested amount from the Deployment (`deployment.spec.template.spec.containers[].resources.requests.cpu`);
@@ -452,7 +453,7 @@ are dynamic: when a ConfigMap is updated, the corresponding file in a Container 
 are set and read once at Pod start time and never change). Note that there are several ways of creating ConfigMaps but
 we'll stick to a declarative mechanism.
 
-Note that ConfigMaps are *not* intended to be used for sensitive information, like passwords. Use Secrets instead.
+Note that ConfigMaps are *not* intended to be used for sensitive information such as passwords; use Secrets instead.
 
 Create a two-file ConfigMap named 'my-config-map' with
 [this ConfigMap YAML](./ConfigMaps/my-config-map.yaml "Example ConfigMap").
