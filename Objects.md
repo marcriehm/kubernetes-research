@@ -2,7 +2,7 @@
 
 ### Overview
 
-Kubernetes *Objects*, or *Resources* are the core application-level entities within the system; they define your application
+Kubernetes *Objects*, or *Resources*, are the core application-level entities within the system; they define your application
 components and structure to Kubernetes. They may be seen as persistent “records of intent” within the
 [declarative model](./Declarative.md "The Declarative Approach") - whenever differences exist between the current Object
 state (the *status*) and the declared,
@@ -54,7 +54,8 @@ This is not an exhaustive set of Objects, but these are the principal ones for a
 See:
 * https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 
-*Labels* are metadata key/value pairs which are associated with Objects. They are used for identifying Objects,
+*Labels* are [metadata](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.12/#objectmeta-v1-meta "Object Metadata)
+key/value pairs which are associated with Objects. They are used for identifying Objects,
 particularly in groups; this may be for end-user queries or it might be to compose a higher-level object, like a
 Service, from a set of lower-level Objects that are identified by their labels. Key syntax is \[domain-name/\]label-name,
 where \[domain-name\] is optional. Some label examples are:  
@@ -101,7 +102,8 @@ unstructured, and can include characters not permitted by labels.
 See:
 * https://kubernetes.io/docs/concepts/architecture/nodes/
 
-Nodes represent computing resources (virtual or physical machines) on which Pods may run. Typically a Node is
+[*Nodes*](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.12/#node-v1-core "Nodes)
+represent computing resources (virtual or physical machines) on which Pods may run. Typically a Node is
 a VM in the cloud environment. Nodes cannot be created within Kubernetes itself – they must be created externally in
 the cloud environment and then assigned to Kubernetes. See
 [Create a Node Pool in GKE](./gke_create_node_pool.md "Create a Node Pool in GKE").
