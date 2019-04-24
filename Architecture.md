@@ -1,6 +1,6 @@
 ## Overall Architecture
 
-There are two primary views of the Kubernetes architecture: they physical architecture of the Kubernetes implementation
+There are two primary views of the Kubernetes architecture: the physical architecture of the Kubernetes implementation
 itself and the logical architecture of deployed applications.
 
 ### Physical Kubernetes Architecture
@@ -181,6 +181,18 @@ GCP/KE").
 ### Logical Application Architecture
 
 The logical application architecture of an example Kubernetes application is depicted below.
-![Logical application architecture](Kubernetes-Logical-Architecture.png "Logical Application Architecture")
+
+![Logical application architecture](Kubernetes-Logical-Architecture.png "Logical Application Architecture").
+
+In this example, an HTTP Ingress Object is used as the main application entry point. The other possibility is to use
+a LoadBalancer Service.
+
+The Ingress object reverse proxies HTTP to a Webapp Service. This might be either a ClusterIP or a NodePort Service.
+The webapp Service load balances across the Pods of a Webapp Deployment, which manages the Pods.
+
+The webapp Pods make use of a microservice. Like the webapp, the microservice is fronted by a load-balancing Service
+and is managed by a Deployment. Communication between the webapp and the microservice is JSON over HTTP.
+
+The microservice in turn uses a SQL database, which resides in a single Pod managed by a StatefulSet.
 
 <p align="center"><a href="./Declarative.md">&larr;&nbsp;Previous</a>&nbsp;&vert;&nbsp;<a href="./Objects.md">Next&nbsp;&rarr;</a></p>
