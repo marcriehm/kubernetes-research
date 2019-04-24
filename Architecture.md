@@ -26,10 +26,10 @@ The principal master services are:
 See:
 * https://kubernetes.io/docs/reference/command-line-tools-reference/kube-apiserver/
 
-The [API server (https://kubernetes.io/docs/reference/command-line-tools-reference/kube-apiserver/ "API Server")
+The [API server](https://kubernetes.io/docs/reference/command-line-tools-reference/kube-apiserver/ "API Server")
 is often likened to the (memory-less) brain of Kubernetes. It is the front end for the control
 plane. The API is accessed by two different protocols: RESTful JSON (configured by the end user as YAML) and
-[gRPC] (https://grpc.io/ "gRPC"). gRPC is used internally within the control plane, while RESTful JSON is used
+[gRPC](https://grpc.io/ "gRPC"). gRPC is used internally within the control plane, while RESTful JSON is used
 in communication with UIs (e.g. kubectl). YAML configuration is declarative, not imperative. The API server acts
 as the endpoint for both external user connectivity to the Kubernetes cluster as well as for many of the internal,
 intra-component communication needs. The API server is the only component which interfaces directly with etcd:
@@ -53,7 +53,8 @@ stores both the current and desired states of the system, as well as the current
 itself, etcd is a project of the Cloud Native Computing Foundation (CNCF).
 
 Acccording to https://en.wikipedia.org/wiki/Kubernetes#Kubernetes_control_plane_(primary), etcd favours Consistency
-over Availability (think CAP theorem) in order to ensure correct operations. Another reference \[*The Kubernetes Book*;
+over Availability (think [CAP theorem](https://en.wikipedia.org/wiki/CAP_theorem "CAP Theorem")) in order to ensure correct
+operations. Another reference \[*The Kubernetes Book*;
 Nigel Poulton\] says that etcd prefers Consistency over Availability and does not tolerate a “split-brain” situation.
 If such a situation arises, Kubernetes will halt updates to the cluster; however, applications should continue to work.
 
