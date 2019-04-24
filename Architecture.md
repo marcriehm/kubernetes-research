@@ -193,6 +193,7 @@ The webapp Service load balances across the Pods of a Webapp Deployment, which m
 The webapp Pods make use of a microservice. Like the webapp, the microservice is fronted by a load-balancing Service
 and is managed by a Deployment. Communication between the webapp and the microservice is JSON over HTTP.
 
-The microservice in turn uses a SQL database, which resides in a single Pod managed by a StatefulSet.
+The microservice in turn uses a SQL database, which resides in a single Pod managed by a StatefulSet. The storage for
+the database resides in a PersistentVolume.
 
 <p align="center"><a href="./Declarative.md">&larr;&nbsp;Previous</a>&nbsp;&vert;&nbsp;<a href="./Objects.md">Next&nbsp;&rarr;</a></p>
