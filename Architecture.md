@@ -1,6 +1,11 @@
 ## Overall Architecture
 
-This section discusses the high-level software architecture of the Kubernetes implementation itself. It is good to
+There are two primary views of the Kubernetes architecture: they physical architecture of the Kubernetes implementation
+itself and the logical architecture of deployed applications.
+
+### Physical Kubernetes Architecture
+
+This section discusses the software architecture of the Kubernetes implementation itself. It is good to
 have this overview, but if you're working in the cloud (e.g. GKE) you don't initially need more than a passing
 understanding of the concepts (which is all you’ll get from this document).
 
@@ -12,7 +17,7 @@ on granular application execution
 The high-level component architecture of Kubernetes is depicted below.
 ![High-level architecture](High-Level-Architecture.png "High-Level Architecture")
 
-### Master Services
+#### Master Services
 
 The principal master services are:
 * kube-apiserver
@@ -21,7 +26,7 @@ The principal master services are:
 * kube scheduler
 * cloud controller-manager
 
-#### kube-apiserver
+##### kube-apiserver
 
 See:
 * https://kubernetes.io/docs/reference/command-line-tools-reference/kube-apiserver/
@@ -42,7 +47,7 @@ The API server manages user authentication and authorization.
 
 The kube-apiserver can scale horizontally.
 
-#### etcd – the cluster store
+##### etcd – the cluster store
 
 See:
 * https://github.com/etcd-io/etcd/blob/master/Documentation/docs.md
@@ -62,7 +67,7 @@ Etcd achieves consistency through the use of the
 [RAFT consensus algorithm] (https://en.wikipedia.org/wiki/Raft_(computer_science) "RAFT consensus algorithm") and a
 highly-available replicated log. Etcd is written in Go and its interface is gRPC.
 
-#### kube-controller-manager
+##### kube-controller-manager
 
 See:
 * https://kubernetes.io/docs/reference/command-line-tools-reference/kube-controller-manager/
@@ -95,7 +100,7 @@ loops manage state as follows:
 
 This logic is at the heart of Kubernetes’s declarative design pattern.
 
-#### kube-scheduler
+##### kube-scheduler
 
 See:
 * https://kubernetes.io/docs/reference/command-line-tools-reference/kube-scheduler/
@@ -108,7 +113,7 @@ resources; does the node have the pod already; and number of running pods. Sched
 
 Note that the Scheduler is a key component in supporting the declarative execution of Pods.
 
-#### Cloud-controller-manager
+##### Cloud-controller-manager
 
 See:
 * https://kubernetes.io/docs/concepts/architecture/cloud-controller/
@@ -118,9 +123,9 @@ are cloud-dependent. The CCM provides a plugin model and manages integrations wi
 and services such as load-balancers and storage. At the time of writing, it seems that there is some flux between
 the KCM and the CCM.
 
-### Other Services
+#### Other Services
 
-#### kubelet
+##### kubelet
 
 See:
 * https://kubernetes.io/docs/reference/command-line-tools-reference/kubelet/
@@ -128,7 +133,7 @@ See:
 The *kubelet* is a container-focused service which runs on every data-plane node and is responsible for running
 and monitoring Pods on that Node. The kubelet interfaces with Docker to run applications.
 
-#### System Pods
+##### System Pods
 
 Where possible, other core Kubernetes services run as Pods on Nodes. Some examples of such services
 include:
@@ -138,13 +143,13 @@ include:
 * *kube-proxy* – maintains network routing rules (ipvs) and performs connection forwarding, routing network
 traffic to the appropriate Pods based on their IP addresses and ports.
 
-### User Interfaces
+#### User Interfaces
 
 The primary user interface for Kubernetes, on any implementation, is a command-line tool called kubectl. kubectl is
 a command-line interface to the kube-apiserver. kubectl is provided as part of the Kubernetes distribution and
 it may be used against any Kubernetes implementation (e.g. GKE, Amazon EKS, Minikube).
 
-#### kubectl
+##### kubectl
 
 The primary functions of kubectl are to:
 * make declarations of new (desired) system state;
@@ -162,7 +167,7 @@ kubectl is discussed further in [kubect.md](./kubectl.md "kubectl.md").
 
 See https://kubernetes.io/docs/reference/kubectl/cheatsheet/.
 
-#### GCP/KE UI
+##### GCP/KE UI
 
 As part of its [Google Cloud Platform (GCP) UI](https://console.cloud.google.com "GCP Home"), Google provides a
 basic Kubernetes Engine UI, GCP/KE, for viewing and manipulating some basic Kubernetes functionality. Within GCP,
@@ -172,5 +177,10 @@ primary user interface. Significantly, GCP/KE can be used to view performance me
 To create your own Kubernetes cluster on Google Kubernetes Engine (GCP/KE), follow the instructions here:
 [Create your Own Kubernetes Cluster on GCP/KE](./create_gke_cluster.md "Create your Own Kubernetes Cluster on
 GCP/KE").
+
+### Logical Application Architecture
+
+The logical application architecture of an example Kubernetes application is depicted below.
+![Logical application architecture](Kubernetes-Logical-Architecture.png "Logical Application Architecture")
 
 <p align="center"><a href="./Declarative.md">&larr;&nbsp;Previous</a>&nbsp;&vert;&nbsp;<a href="./Objects.md">Next&nbsp;&rarr;</a></p>
