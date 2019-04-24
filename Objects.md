@@ -102,7 +102,7 @@ unstructured, and can include characters not permitted by labels.
 See:
 * https://kubernetes.io/docs/concepts/architecture/nodes/
 
-[*Nodes*](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.12/#node-v1-core "Nodes)
+[*Nodes*](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.12/#node-v1-core "Nodes")
 represent computing resources (virtual or physical machines) on which Pods may run. Typically a Node is
 a VM in the cloud environment. Nodes cannot be created within Kubernetes itself – they must be created externally in
 the cloud environment and then assigned to Kubernetes. See
