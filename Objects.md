@@ -2,7 +2,7 @@
 
 ### Overview
 
-Kubernetes *Objects*, or *Resources* are the core application-level entities within the system; they define your application
+Kubernetes *Objects*, or *Resources*, are the core application-level entities within the system; they define your application
 components and structure to Kubernetes. They may be seen as persistent “records of intent” within the
 [declarative model](./Declarative.md "The Declarative Approach") - whenever differences exist between the current Object
 state (the *status*) and the declared,
@@ -54,7 +54,8 @@ This is not an exhaustive set of Objects, but these are the principal ones for a
 See:
 * https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 
-*Labels* are metadata key/value pairs which are associated with Objects. They are used for identifying Objects,
+*Labels* are [metadata](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.12/#objectmeta-v1-meta "Object Metadata")
+key/value pairs which are associated with Objects. They are used for identifying Objects,
 particularly in groups; this may be for end-user queries or it might be to compose a higher-level object, like a
 Service, from a set of lower-level Objects that are identified by their labels. Key syntax is \[domain-name/\]label-name,
 where \[domain-name\] is optional. Some label examples are:  
@@ -71,7 +72,7 @@ It is important to derive a consistent approach to labeling.
 &nbsp;&nbsp;&nbsp;`microservice in (authentication, foobar)`  
 &nbsp;&nbsp;&nbsp;`KEY`	# select items which have the given key defined
 
-Other selectors include `notin`, Multiple selectors may be used in one selection. An example kubectl usage is:  
+Other selectors include `notin`. Multiple selectors may be used in one selection. An example kubectl usage is:  
 &nbsp;&nbsp;&nbsp;`kubectl get pods -l environment=production,tier=frontend`
 
 Selectors are used in the creation of Services; you use a Label Selector to identify a group of Pods which are load-balanced
@@ -101,7 +102,8 @@ unstructured, and can include characters not permitted by labels.
 See:
 * https://kubernetes.io/docs/concepts/architecture/nodes/
 
-Nodes represent computing resources (virtual or physical machines) on which Pods may run. Typically a Node is
+[*Nodes*](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.12/#node-v1-core "Nodes")
+represent computing resources (virtual or physical machines) on which Pods may run. Typically a Node is
 a VM in the cloud environment. Nodes cannot be created within Kubernetes itself – they must be created externally in
 the cloud environment and then assigned to Kubernetes. See
 [Create a Node Pool in GKE](./gke_create_node_pool.md "Create a Node Pool in GKE").
@@ -117,7 +119,8 @@ See:
 * https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/
 * https://cloud.google.com/blog/products/gcp/kubernetes-best-practices-organizing-with-namespaces
 
-*Namespaces* provide a mechanism to define scopes which logically separate Objects by scope name within Kubernetes.
+[*Namespaces*](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.12/#namespace-v1-core "Namespaces")
+provide a mechanism to define scopes which logically separate Objects by scope name within Kubernetes.
 At a simplistic level, a namespace can be viewed as an isolated, virtual cluster.
 
 Namespaces seem like a good way to separate development users from each other, however the Kubernetes documentation provides the
@@ -157,7 +160,9 @@ The default namespace (if none is given) is named ‘default’.
 See:
 * https://kubernetes.io/docs/concepts/workloads/pods/pod-overview/
 
-*Pods* are the smallest application deployment objects in Kubernetes. Pods run on Nodes. Pods execute in Docker and
+[*Pods*](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.12/#pod-v1-core "Pods") are the finest-grained
+application deployment objects in Kubernetes. Pods run on Nodes. Pods execute in Docker (or the newer and supposedly
+lighter-weight [CRI-O](https://cri-o.io/ "CRI-O")) and
 contain one (usually) or more *Containers*, with each Container running a single Docker image. Each Pod runs one instance
 of an application, for example a web application. Multiple Pods (grouped under a Service) are used to scale the
 application horizontally.
@@ -189,7 +194,9 @@ definitions, or *pod-specs*. Those templates are used to define Pods within the 
 #### Pod-specs
 
 When a Controller is instantiated it creates one or more Pods. The Controller's Pod template specifies how to create
-the Pods of the Controller. Pod templates may contain all of the attributes of Pods.
+the Pods of the Controller.
+[Pod templates](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.12/#podtemplatespec-v1-core "Pod Template")
+may contain all of the attributes of Pods.
 
 An example Pod definition is [here](./PersistentVolumes/HostPathPod.yaml "Example Pod Definition"). This Pod definition
 is for example only and again, in general, Pods should not be created directly. An example Job definition, which creates
@@ -205,7 +212,8 @@ See:
 * https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
 * https://cloud.google.com/kubernetes-engine/docs/concepts/deployment
 
-Deployments are the most common and important kind of Controller. A Deployment declares that a number of identical
+[*Deployments*](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.12/#deployment-v1-apps "Deployments") are the
+most common and important kind of Controller. A Deployment declares that a number of identical
 Pods be scheduled for creation and execution across the Nodes of a cluster. Deployments do not say where the Pods are to be
 run; that is determined by the Scheduler. A common example of a Deployment is a web application or a microservice. Deployments
 typically run stateless services; for a stateful component, consider using a StatefulSet instead.
@@ -267,7 +275,9 @@ See:
 * https://cloud.google.com/kubernetes-engine/docs/concepts/statefulset
 * https://kubernetes.io/docs/tasks/run-application/run-replicated-stateful-application/ \[replicated mysqld example\]
 
-While Deployments are meant to be for stateless components, *StatefulSets* are controllers which are, as the name
+While Deployments are meant to be for stateless components,
+[*StatefulSets*](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.12/#statefulset-v1-apps "Stateful Sets")
+are controllers which are, as the name
 suggests, meant for stateful ones. Like Deployments, StatefulSets manage (via ReplicaSets) sets of templated Pods.
 
 Unlike Deployments, each Pod in a Statefulset is given a sticky identify, which is an ordinal number. The hostname
@@ -290,7 +300,8 @@ See:
 * https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/
 * https://cloud.google.com/kubernetes-engine/docs/concepts/daemonset
 
-A *DaemonSet* is a Controller which arranges for a single Pod to be run on each of a set of matching Nodes (or
+A [*DaemonSet*](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.12/#daemonset-v1-apps "Daemon Set") is a
+Controller which arranges for a single Pod to be run on each of a set of matching Nodes (or
 perhaps all Nodes). If a Node is added to or deleted from the cluster, the DaemonSet will spin up or tear down
 a Pod on it. DaemonSets are used within Kubernetes itself to collect Pod logs and Node and Pod performance metrics.
 
@@ -301,7 +312,8 @@ See:
 * https://cloud.google.com/kubernetes-engine/docs/how-to/jobs
 * https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/
 
-A *Job* is a Controller which runs a set of one or more Pods which are **expected** to terminate (hopefully successfully).
+A [*Job*](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.12/#job-v1-batch "Job") is a Controller
+which runs a set of one or more Pods which are **expected** to terminate (hopefully successfully).
 This is in contrast to a Deployment which runs a set of Pods which are not expected to terminate. Jobs are for batch
 processing.
 
@@ -314,7 +326,8 @@ checked. Jobs should be cleaned up either manually (via interactive kubectl) or 
 In case of Job failure partway through, Job logic should be written to be idempotent - in other words, so that the
 same logic can be run correctly multiple times.
 
-A *CronJob* is a Job which runs on a regular schedule with cron-like configuration.
+A [*CronJob*](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.12/#cronjob-v1beta1-batch "Cron Job") is a
+Job which runs on a regular schedule with cron-like configuration.
 
 ### HorizontalPodAutoscaler
 
@@ -325,7 +338,9 @@ This discussion is about the autoscaling/v1 version of autoscaling. New features
 (https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.14/#horizontalpodautoscaler-v2beta2-autoscaling). The new
 features include scaling by memory and by custom resource types.
 
-A *HorizontalPodAutoscaler* (HPA) is an Object which configures horizontal scaling, based on CPU load, of the Pods in a Deployment.
+A [*HorizontalPodAutoscaler*](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.12/#horizontalpodautoscaler-v2beta2-autoscaling "Horizontal Pod Autoscaler")
+(HPA) is an Object which configures horizontal scaling, based on CPU load, of the Pods in a Deployment. Horizontal scaling
+increases the number of Pods in a Deployment to spread the load across a larger number of workers.
 Scaling is performed by comparing actual CPU resource usage against a target which is set in the HPA spec. The YAML field
 for the target is `spec.targetCPUUtilizationPercentage`. The "utilization" is the ratio between the current average CPU
 usage  and the requested amount from the Deployment (`deployment.spec.template.spec.containers[].resources.requests.cpu`);
@@ -341,7 +356,8 @@ See:
 * https://kubernetes.io/docs/concepts/services-networking/service/
 * https://cloud.google.com/kubernetes-engine/docs/concepts/service
 
-A *Service* groups together the network endpoints of a set of Pods into a single resource, load balancing across
+A [*Service*](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.12/#service-v1-core "Services") groups
+together the network endpoints of a set of Pods into a single resource, load balancing across
 the Pods. Services may have a public IP address, or they may be private. Examples of Services are a public,
 load-balanced webserver front end and a (private) load-balanced back-end microservice.
 
@@ -406,7 +422,8 @@ See:
 * https://kubernetes.io/docs/concepts/services-networking/ingress/
 * https://kubernetes.io/docs/concepts/services-networking/ingress/
 
-An *Ingress* is a publicly-available Layer 7 HTTP(S) proxy. An Ingress can be used to provide external connectivity as
+An [*Ingress*](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.12/#ingress-v1beta1-extensions "Ingresses")
+is a publicly-available Layer 7 HTTP(S) proxy. An Ingress can be used to provide external connectivity as
 an alternative to a LoadBalancer Service. An Ingress can be used to: give services externally-reachable URLs; perform
 fanout based on URL; load balance traffic; terminate SSL; and provide name-based virtual hosting.
 
@@ -420,7 +437,7 @@ allocated for the Ingress.
 
 ### Volumes, PersistentVolumes and PersistentVolumeClaims
 
-Volumes are used by Pods to refer to storage that is external to those pods. That storage might be defined at the
+*Volumes* are used by Pods to refer to storage that is external to those pods. That storage might be defined at the
 Node level or higher, and may or may not be shareable between Containers or Pods. See [Volumes](./Volumes.md "Volumes").
 
 ### ConfigMaps
@@ -429,13 +446,14 @@ See:
 * https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-configmap/
 * https://medium.com/google-cloud/kubernetes-configmaps-and-secrets-part-2-3dc37111f0dc
 
-A *ConfigMap* is an Object which stores configuration information for use by Pods. Pods can be configured to
+A [*ConfigMap*](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.12/#configmap-v1-core "Config Maps")
+is an Object which stores configuration information for use by Pods. Pods can be configured to
 read ConfigMaps either as environment variables or as files. The file approach is superior because the resulting files
 are dynamic: when a ConfigMap is updated, the corresponding file in a Container is updated (while environment variables
 are set and read once at Pod start time and never change). Note that there are several ways of creating ConfigMaps but
 we'll stick to a declarative mechanism.
 
-Note that ConfigMaps are *not* intended to be used for sensitive information, like passwords. Use Secrets instead.
+Note that ConfigMaps are *not* intended to be used for sensitive information such as passwords; use Secrets instead.
 
 Create a two-file ConfigMap named 'my-config-map' with
 [this ConfigMap YAML](./ConfigMaps/my-config-map.yaml "Example ConfigMap").
@@ -452,7 +470,8 @@ and type:
 See:
 * https://kubernetes.io/docs/concepts/configuration/secret/
 
-A *Secret* is an Object which is intended to store sensitive configuration information. They are very similar to ConfigMaps,
+A [*Secret*](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.12/#secret-v1-core "Secrets")
+is an Object which is intended to store sensitive configuration information. They are very similar to ConfigMaps,
 except for:
 * The data of a Secret is base64 encoded
 * The value of a Secret is never exposed when using kubectl

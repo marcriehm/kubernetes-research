@@ -8,7 +8,7 @@ See:
 The Kubernetes API Server speaks two languages: [gRPC](https://grpc.io "gRPC") and RESTful JSON (I believe it is the case
 that when YAML is used, for example in declarative files, it is converted
 to JSON before being sent to the API server). Either form of communication can be used between components; they follow the same
-schema definition and
+Object schema definition and
 there is a one-to-one mapping between the gRPC syntax and the RESTful one. I believe that intra-component communication between
 Kubernetes components themselves is gRPC. This page discusses the REST API because it is more likely to be encountered by end users.
 
@@ -46,6 +46,7 @@ Some examples are:
 For POST (create), PUT (update), or DELETE (delete) operations, the payload defining the Object is given in JSON in the body of the
 HTTP message. The API docs at https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.12 do a good job of defining
 the Object JSON for all of the kinds of Objects. It is a good idea to familiarize yourself with the API docs as a reference
-for creating declarative files. Note again that the Object schema can change between API versions.
+for creating declarative files. Note again that the Object schema can change between API versions. Note that the API docs are
+generated from [protobuf](https://developers.google.com/protocol-buffers/ "Protocol Buffers") declaration files.
 
 <p align="center"><a href="./HealthChecking.md">&larr;&nbsp;Previous</a>&nbsp;&vert;&nbsp;<a href="./Authentication.md">Next&nbsp;&rarr;</a></p>
