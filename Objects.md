@@ -54,7 +54,7 @@ This is not an exhaustive set of Objects, but these are the principal ones for a
 See:
 * https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 
-*Labels* are [metadata](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.12/#objectmeta-v1-meta "Object Metadata)
+*Labels* are [metadata](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.12/#objectmeta-v1-meta "Object Metadata")
 key/value pairs which are associated with Objects. They are used for identifying Objects,
 particularly in groups; this may be for end-user queries or it might be to compose a higher-level object, like a
 Service, from a set of lower-level Objects that are identified by their labels. Key syntax is \[domain-name/\]label-name,
@@ -72,7 +72,7 @@ It is important to derive a consistent approach to labeling.
 &nbsp;&nbsp;&nbsp;`microservice in (authentication, foobar)`  
 &nbsp;&nbsp;&nbsp;`KEY`	# select items which have the given key defined
 
-Other selectors include `notin`, Multiple selectors may be used in one selection. An example kubectl usage is:  
+Other selectors include `notin`. Multiple selectors may be used in one selection. An example kubectl usage is:  
 &nbsp;&nbsp;&nbsp;`kubectl get pods -l environment=production,tier=frontend`
 
 Selectors are used in the creation of Services; you use a Label Selector to identify a group of Pods which are load-balanced
@@ -160,8 +160,9 @@ The default namespace (if none is given) is named ‘default’.
 See:
 * https://kubernetes.io/docs/concepts/workloads/pods/pod-overview/
 
-[*Pods*](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.12/#pod-v1-core "Pods") are the smallest
-application deployment objects in Kubernetes. Pods run on Nodes. Pods execute in Docker and
+[*Pods*](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.12/#pod-v1-core "Pods") are the finest-grained
+application deployment objects in Kubernetes. Pods run on Nodes. Pods execute in Docker (or the newer and supposedly
+lighter-weight [CRI-O](https://cri-o.io/ "CRI-O")) and
 contain one (usually) or more *Containers*, with each Container running a single Docker image. Each Pod runs one instance
 of an application, for example a web application. Multiple Pods (grouped under a Service) are used to scale the
 application horizontally.
