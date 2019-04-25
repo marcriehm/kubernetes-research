@@ -9,7 +9,7 @@ See:
 may persist beyond the life of any one Pod. Some types of volumes may be shared between Containers. Volumes
 may be read-only or read-write. Volumes of Pods are analogous to volumes of Docker containers.
 
-There is a wide range of volume types; see https://cloud.google.com/kubernetes-engine/docs/concepts/persistent-volumes.
+There is a wide range of volume types; see https://kubernetes.io/docs/concepts/storage/volumes/.
 Some of these volume types are specific to particular environments (i.e. cloud-providers). The types discussed here are:
 * hostPath
 * emptyDir
