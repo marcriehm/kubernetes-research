@@ -24,7 +24,7 @@ Kubernetes provides a framework, based on Google's best practices, for managing:
 * networking;
 * storage;
 * resource management;
-* health montoring and healing;
+* health monitoring and healing;
 * scalability;
 * fault tolerance;
 * logging, including application and audit;
@@ -38,7 +38,7 @@ Kubernetes does not provide:
 But it does provide a platform for such services!
 
 Kubernetes is an open-source system written in Go. It was developed originally by Google and is now managed
-by the Cloud Native Computing Foundation and is available on all major cloud platforms. It is under very active
+by the Cloud Native Computing Foundation. It is available on all major cloud platforms. It is under very active
 development, which is both good (momentum) and bad (fast-moving; documentation challenges). Kubernetes has
 bested Docker Swarms as the dominant distributed container technology. It provides high-level infrastructure
 and application abstractions which can make applications largely portable across providers, whether cloud-based

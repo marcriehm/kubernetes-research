@@ -29,7 +29,6 @@ metadata:
 subjects:
 - kind: ${USER_GROUP}
   name: ${SUBJECT}
-  apiGroup: rbac.authorization.k8s.io
 roleRef:
   kind: ClusterRole
   name: ${ROLE}

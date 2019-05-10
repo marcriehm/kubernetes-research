@@ -7,6 +7,7 @@ Engine (GKE).
 
 ## Principal Online Documentation
 The main Kubernetes docs are at http://kubernetes.io/docs. GKE docs are found at https://cloud.google.com/kubernetes-engine/docs.
+Note that in these documents GKE is also known as GCP/KE (Google Cloud Platform / Kubernetes Engine).
 
 ## Scope
 
@@ -26,16 +27,20 @@ separate out the GKE specifics from the Kubernetes generalities.
 Readers are expected to have basic knowledge of:
 * Linux, including the command line;
 * Docker;
-* YAML.
+* YAML and JSON;
+* HTTP.
 
 ## Table of Contents
 &nbsp;&nbsp;&nbsp;[Overview](./Overview.md "Overview")  
 &nbsp;&nbsp;&nbsp;[Declarative vs. Imperative Management](./Declarative.md "Declarative vs. Imperative Management")  
 &nbsp;&nbsp;&nbsp;[Architecture](./Architecture.md "Architecture")  
 &nbsp;&nbsp;&nbsp;[Objects](./Objects.md "Objects")  
+&nbsp;&nbsp;&nbsp;[Health Checking](./HealthChecking.md "Health Checking")  
 &nbsp;&nbsp;&nbsp;[API](./API.md "API")  
 &nbsp;&nbsp;&nbsp;[Authentication](./Authentication.md "Authentication")  
 &nbsp;&nbsp;&nbsp;[Authorization](./Authorization.md "Authorization")  
 &nbsp;&nbsp;&nbsp;[Auditing and Logging](./Logging.md "Auditing and Logging")  
+&nbsp;&nbsp;&nbsp;[Alerting](./Alerting.md "Alerting")  
 &nbsp;&nbsp;&nbsp;[Resource Allocation and Monitoring](./Resources.md "Resource Allocation and Monitoring")  
+
 <p align="center"><a href="./Overview.md">Next&nbsp;&rarr;</a></p>
