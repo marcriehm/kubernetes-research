@@ -428,7 +428,7 @@ an alternative to a LoadBalancer Service. An Ingress can be used to: give servic
 fanout based on URL; load balance traffic; terminate SSL; and provide name-based virtual hosting.
 
 The Service underlying an Ingress **must** be of type NodePort - a ClusterIP Service will not work. Ingresses might
-be implemented by Node.js or a similar system.
+be implemented by nginx or a similar system.
 
 Create a NodePort Service by applying [this file](./Ingresses/ip-webapp-nodeip.yaml "NodePort Example"). Create
 an Ingress on this Service with [this file](./Ingresses/ip-webapp-ingress.yaml "Ingress Example"). WAIT for the
